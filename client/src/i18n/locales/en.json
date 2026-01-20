@@ -1,0 +1,240 @@
+{
+  "app": {
+    "name": "VedZeb",
+    "slogan": "Platform for Finding Lost Family Members"
+  },
+  "nav": {
+    "home": "Home",
+    "search": "Search",
+    "about": "About",
+    "contact": "Contact",
+    "dashboard": "My Page",
+    "login": "Login",
+    "logout": "Logout",
+    "createProfile": "Add Listing"
+  },
+  "home": {
+    "hero": {
+      "title": "Find Your Lost Family Members",
+      "subtitle": "A platform for finding lost family members. Those who were adopted or taken at birth",
+      "searchPlaceholder": "Search by name, region...",
+      "searchButton": "Search",
+      "addProfile": "Add Listing"
+    },
+    "stats": {
+      "profiles": "Listings",
+      "reunited": "Reunited",
+      "searching": "Searching"
+    },
+    "recentProfiles": "Recently Added",
+    "viewAll": "View All"
+  },
+  "search": {
+    "title": "Search",
+    "filters": {
+      "title": "Filters",
+      "type": "Search Type",
+      "region": "Region",
+      "gender": "Gender",
+      "birthYear": "Birth Year",
+      "from": "From",
+      "to": "To",
+      "clear": "Clear",
+      "apply": "Apply"
+    },
+    "types": {
+      "all": "All",
+      "searching_sibling": "Searching for Sibling",
+      "searching_child": "Searching for Child",
+      "searching_parent": "Searching for Parent"
+    },
+    "genders": {
+      "all": "All",
+      "male": "Male",
+      "female": "Female",
+      "unknown": "Unknown"
+    },
+    "results": "Results",
+    "noResults": "No results found",
+    "tryDifferent": "Try different search criteria"
+  },
+  "profile": {
+    "view": {
+      "title": "Profile",
+      "birthDate": "Date of Birth",
+      "birthPlace": "Place of Birth",
+      "region": "Region",
+      "lastKnown": "Last Known Location",
+      "story": "Story",
+      "biologicalMother": "About Biological Mother",
+      "biologicalFather": "About Biological Father",
+      "contactButton": "Request Contact",
+      "editButton": "Edit",
+      "deleteButton": "Delete",
+      "similar": "Similar Profiles"
+    },
+    "create": {
+      "title": "Create Listing",
+      "step1": "Basic Information",
+      "step2": "Details",
+      "step3": "Photos",
+      "step4": "Preview",
+      "typeLabel": "Search Type",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "birthDate": "Date of Birth",
+      "approximate": "Approximate",
+      "birthYear": "Birth Year",
+      "birthPlace": "Place of Birth",
+      "region": "Region",
+      "gender": "Gender",
+      "story": "Story / Details",
+      "storyHelp": "Describe in as much detail as possible...",
+      "motherInfo": "About Biological Mother",
+      "fatherInfo": "About Biological Father",
+      "medicalHistory": "Medical History (optional)",
+      "uploadPhotos": "Upload Photos",
+      "uploadHelp": "Maximum 5 photos, 5MB each",
+      "next": "Next",
+      "back": "Back",
+      "submit": "Publish",
+      "success": "Listing created successfully"
+    },
+    "edit": {
+      "title": "Edit Profile",
+      "save": "Save",
+      "cancel": "Cancel"
+    }
+  },
+  "auth": {
+    "title": "Login",
+    "phoneLabel": "Phone Number",
+    "phonePlaceholder": "+995 XXX XXX XXX",
+    "sendCode": "Send Code",
+    "codeLabel": "Verification Code",
+    "codePlaceholder": "Enter 6-digit code",
+    "verify": "Verify",
+    "resendCode": "Resend Code",
+    "resendIn": "Resend available in",
+    "seconds": "seconds"
+  },
+  "dashboard": {
+    "title": "My Page",
+    "myProfiles": "My Listings",
+    "contactRequests": "Contact Requests",
+    "searchAlerts": "Search Alerts",
+    "settings": "Settings",
+    "noProfiles": "You don't have any listings yet",
+    "createFirst": "Create your first listing",
+    "requests": {
+      "sent": "Sent",
+      "received": "Received",
+      "pending": "Pending",
+      "accepted": "Accepted",
+      "rejected": "Rejected",
+      "accept": "Accept",
+      "reject": "Reject"
+    },
+    "alerts": {
+      "noAlerts": "You don't have any search alerts",
+      "create": "Create Alert",
+      "active": "Active",
+      "inactive": "Inactive"
+    }
+  },
+  "contact": {
+    "title": "Contact",
+    "form": {
+      "name": "Name",
+      "email": "Email",
+      "message": "Message",
+      "send": "Send"
+    }
+  },
+  "about": {
+    "title": "About Us",
+    "mission": "Our Mission",
+    "missionText": "To help lost family members find each other.",
+    "whatIsVedzeb": "What is VedZeb?",
+    "whatIsVedzebText": "VedZeb (ვეძებ - 'I'm searching' in Georgian) is a platform dedicated to helping people find their lost family members, particularly those who were adopted or taken at birth. We believe every person has the right to know their family history and reconnect with their biological relatives.",
+    "howItWorks": "How It Works",
+    "howItWorksItems": {
+      "1": "Create a profile with information about the person you're searching for",
+      "2": "Browse existing profiles to find potential matches",
+      "3": "Use filters to narrow down your search by region, birth year, and more",
+      "4": "Send contact requests to connect with other users",
+      "5": "Set up search alerts to be notified when new matching profiles are added"
+    },
+    "privacySafety": "Privacy & Safety",
+    "privacySafetyText": "We take privacy seriously. Your phone number is never shared with other users. Contact between users is facilitated through our secure messaging system, and you have full control over who can contact you."
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "intro": "Introduction",
+    "introText": "VedZeb ('we', 'our', or 'us') is committed to protecting your privacy. This Privacy Policy explains how we collect, use, and safeguard your information when you use our platform.",
+    "infoCollect": "Information We Collect",
+    "infoCollectItems": {
+      "phone": "Phone Number: Required for account verification and authentication.",
+      "profile": "Profile Information: Information you provide when creating search profiles, including names, dates, locations, and photos.",
+      "usage": "Usage Data: Information about how you use our platform."
+    },
+    "howUseInfo": "How We Use Your Information",
+    "howUseInfoItems": {
+      "1": "To provide and maintain our service",
+      "2": "To verify your identity through SMS verification",
+      "3": "To enable other users to find and contact potential family members",
+      "4": "To send notifications about matches and contact requests",
+      "5": "To improve our platform and user experience"
+    },
+    "infoSharing": "Information Sharing",
+    "infoSharingText": "Your phone number is never shared with other users. Contact between users is facilitated through our secure messaging system. Profile information you provide is visible to other users of the platform to help facilitate family reunification.",
+    "dataSecurity": "Data Security",
+    "dataSecurityText": "We implement appropriate technical and organizational measures to protect your personal information. However, no method of transmission over the Internet is 100% secure, and we cannot guarantee absolute security.",
+    "yourRights": "Your Rights",
+    "yourRightsItems": {
+      "1": "Access your personal data",
+      "2": "Correct inaccurate data",
+      "3": "Delete your account and associated data",
+      "4": "Deactivate your profiles at any time"
+    },
+    "contactUs": "Contact Us",
+    "contactUsText": "If you have any questions about this Privacy Policy, please contact us at:",
+    "changes": "Changes to This Policy",
+    "changesText": "We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page.",
+    "lastUpdated": "Last updated"
+  },
+  "footer": {
+    "rights": "All rights reserved"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "retry": "Retry",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "confirm": "Confirm",
+    "yes": "Yes",
+    "no": "No",
+    "close": "Close",
+    "required": "Required",
+    "optional": "Optional"
+  },
+  "regions": {
+    "tbilisi": "Tbilisi",
+    "adjara": "Adjara",
+    "guria": "Guria",
+    "imereti": "Imereti",
+    "kakheti": "Kakheti",
+    "kvemoKartli": "Kvemo Kartli",
+    "mtsketaMtianeti": "Mtskheta-Mtianeti",
+    "rachaLechkhumiKvemoSvaneti": "Racha-Lechkhumi and Kvemo Svaneti",
+    "samegrelo": "Samegrelo-Zemo Svaneti",
+    "samtskheJavakheti": "Samtskhe-Javakheti",
+    "shidaKartli": "Shida Kartli",
+    "abkhazia": "Abkhazia",
+    "southOssetia": "South Ossetia",
+    "other": "Other"
+  }
+}

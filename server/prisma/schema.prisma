@@ -1,0 +1,144 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum ProfileType {
+  searching_sibling
+  searching_child
+  searching_parent
+}
+
+enum Gender {
+  male
+  female
+  unknown
+}
+
+enum ContactRequestStatus {
+  pending
+  accepted
+  rejected
+}
+
+model User {
+  id              String    @id @default(uuid())
+  phone           String    @unique
+  phoneVerified   Boolean   @default(false)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  profiles        Profile[]
+  contactRequests ContactRequest[] @relation("SentRequests")
+  searchAlerts    SearchAlert[]
+  verificationCodes VerificationCode[]
+  refreshTokens   RefreshToken[]
+}
+
+model VerificationCode {
+  id        String   @id @default(uuid())
+  userId    String
+  code      String
+  expiresAt DateTime
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([code])
+}
+
+model RefreshToken {
+  id        String   @id @default(uuid())
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([token])
+}
+
+model Profile {
+  id                    String      @id @default(uuid())
+  userId                String
+  type                  ProfileType
+  firstName             String
+  lastName              String?
+  birthDate             DateTime?
+  birthDateApproximate  Boolean     @default(false)
+  birthYear             Int?
+  birthPlace            String?
+  lastKnownLocation     String?
+  region                String?
+  gender                Gender      @default(unknown)
+  story                 String?     @db.Text
+  biologicalMotherInfo  Json?
+  biologicalFatherInfo  Json?
+  medicalHistory        String?     @db.Text
+  isActive              Boolean     @default(true)
+  createdAt             DateTime    @default(now())
+  updatedAt             DateTime    @updatedAt
+
+  user            User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  photos          Photo[]
+  contactRequests ContactRequest[]
+
+  @@index([userId])
+  @@index([type])
+  @@index([region])
+  @@index([birthYear])
+  @@index([isActive])
+}
+
+model Photo {
+  id        String   @id @default(uuid())
+  profileId String
+  url       String
+  publicId  String?
+  isPrimary Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  profile Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  @@index([profileId])
+}
+
+model ContactRequest {
+  id          String               @id @default(uuid())
+  fromUserId  String
+  toProfileId String
+  message     String?              @db.Text
+  status      ContactRequestStatus @default(pending)
+  createdAt   DateTime             @default(now())
+  updatedAt   DateTime             @updatedAt
+
+  fromUser  User    @relation("SentRequests", fields: [fromUserId], references: [id], onDelete: Cascade)
+  toProfile Profile @relation(fields: [toProfileId], references: [id], onDelete: Cascade)
+
+  @@unique([fromUserId, toProfileId])
+  @@index([fromUserId])
+  @@index([toProfileId])
+  @@index([status])
+}
+
+model SearchAlert {
+  id        String   @id @default(uuid())
+  userId    String
+  filters   Json
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([isActive])
+}
