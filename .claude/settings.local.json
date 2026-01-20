@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install)",
+      "Bash(npm run dev:*)",
+      "Bash(git -C \"C:\\\\Users\\\\User\\\\Desktop\\\\vedzeb\" status)",
+      "Bash(git -C \"C:\\\\Users\\\\User\\\\Desktop\\\\vedzeb\" init)",
+      "Bash(git -C \"C:\\\\Users\\\\User\\\\Desktop\\\\vedzeb\" add .)"
+    ]
+  }
+}
