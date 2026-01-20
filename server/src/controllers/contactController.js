@@ -1,4 +1,4 @@
-import { prisma } from '../app.js';
+import { prisma } from '../lib/prisma.js';
 import { AppError } from '../middleware/errorHandler.js';
 
 export const createContactRequest = async (req, res, next) => {

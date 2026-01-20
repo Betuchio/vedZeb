@@ -1,4 +1,4 @@
-import { prisma } from '../app.js';
+import { prisma } from '../lib/prisma.js';
 import { AppError } from '../middleware/errorHandler.js';
 import { uploadImage, deleteImage, deleteMultipleImages } from '../services/cloudinary.js';
 
@@ -12,6 +12,9 @@ export const getProfiles = async (req, res, next) => {
       gender,
       birthYearFrom,
       birthYearTo,
+      birthMonth,
+      birthDay,
+      maternityHospital,
       search
     } = req.query;
 
@@ -42,6 +45,18 @@ export const getProfiles = async (req, res, next) => {
       if (birthYearTo) {
         where.birthYear.lte = parseInt(birthYearTo);
       }
+    }
+
+    if (birthMonth) {
+      where.birthMonth = parseInt(birthMonth);
+    }
+
+    if (birthDay) {
+      where.birthDay = parseInt(birthDay);
+    }
+
+    if (maternityHospital) {
+      where.maternityHospital = maternityHospital;
     }
 
     if (search) {
@@ -127,14 +142,20 @@ export const createProfile = async (req, res, next) => {
       birthDate,
       birthDateApproximate,
       birthYear,
+      birthMonth,
+      birthDay,
       birthPlace,
+      maternityHospital,
       lastKnownLocation,
       region,
       gender,
       story,
       biologicalMotherInfo,
       biologicalFatherInfo,
-      medicalHistory
+      medicalHistory,
+      myBirthYear,
+      myBirthMonth,
+      myBirthDay
     } = req.body;
 
     const profile = await prisma.profile.create({
@@ -146,14 +167,20 @@ export const createProfile = async (req, res, next) => {
         birthDate: birthDate ? new Date(birthDate) : null,
         birthDateApproximate: birthDateApproximate || false,
         birthYear: birthYear ? parseInt(birthYear) : null,
+        birthMonth: birthMonth ? parseInt(birthMonth) : null,
+        birthDay: birthDay ? parseInt(birthDay) : null,
         birthPlace,
+        maternityHospital,
         lastKnownLocation,
         region,
         gender: gender || 'unknown',
         story,
         biologicalMotherInfo,
         biologicalFatherInfo,
-        medicalHistory
+        medicalHistory,
+        myBirthYear: myBirthYear ? parseInt(myBirthYear) : null,
+        myBirthMonth: myBirthMonth ? parseInt(myBirthMonth) : null,
+        myBirthDay: myBirthDay ? parseInt(myBirthDay) : null
       }
     });
 
@@ -186,7 +213,10 @@ export const updateProfile = async (req, res, next) => {
       birthDate,
       birthDateApproximate,
       birthYear,
+      birthMonth,
+      birthDay,
       birthPlace,
+      maternityHospital,
       lastKnownLocation,
       region,
       gender,
@@ -194,6 +224,9 @@ export const updateProfile = async (req, res, next) => {
       biologicalMotherInfo,
       biologicalFatherInfo,
       medicalHistory,
+      myBirthYear,
+      myBirthMonth,
+      myBirthDay,
       isActive
     } = req.body;
 
@@ -206,7 +239,10 @@ export const updateProfile = async (req, res, next) => {
         ...(birthDate !== undefined && { birthDate: birthDate ? new Date(birthDate) : null }),
         ...(birthDateApproximate !== undefined && { birthDateApproximate }),
         ...(birthYear !== undefined && { birthYear: birthYear ? parseInt(birthYear) : null }),
+        ...(birthMonth !== undefined && { birthMonth: birthMonth ? parseInt(birthMonth) : null }),
+        ...(birthDay !== undefined && { birthDay: birthDay ? parseInt(birthDay) : null }),
         ...(birthPlace !== undefined && { birthPlace }),
+        ...(maternityHospital !== undefined && { maternityHospital }),
         ...(lastKnownLocation !== undefined && { lastKnownLocation }),
         ...(region !== undefined && { region }),
         ...(gender && { gender }),
@@ -214,6 +250,9 @@ export const updateProfile = async (req, res, next) => {
         ...(biologicalMotherInfo !== undefined && { biologicalMotherInfo }),
         ...(biologicalFatherInfo !== undefined && { biologicalFatherInfo }),
         ...(medicalHistory !== undefined && { medicalHistory }),
+        ...(myBirthYear !== undefined && { myBirthYear: myBirthYear ? parseInt(myBirthYear) : null }),
+        ...(myBirthMonth !== undefined && { myBirthMonth: myBirthMonth ? parseInt(myBirthMonth) : null }),
+        ...(myBirthDay !== undefined && { myBirthDay: myBirthDay ? parseInt(myBirthDay) : null }),
         ...(isActive !== undefined && { isActive })
       },
       include: {

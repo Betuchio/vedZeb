@@ -1,11 +1,26 @@
 // SMS Service - supports mock mode for development and Twilio for production
 
+// Static test code for mock mode
+const MOCK_TEST_CODE = '123456';
+
 export const generateVerificationCode = () => {
+  // In mock mode, always return the static test code
+  const mockMode = process.env.SMS_MOCK_MODE;
+  const isMockMode = mockMode === 'true' || mockMode === true || !process.env.TWILIO_ACCOUNT_SID;
+
+  if (isMockMode) {
+    return MOCK_TEST_CODE;
+  }
+
   return Math.floor(100000 + Math.random() * 900000).toString();
 };
 
 export const sendSMS = async (phoneNumber, message) => {
-  const isMockMode = process.env.SMS_MOCK_MODE === 'true';
+  // Check mock mode - be defensive about the check
+  const mockMode = process.env.SMS_MOCK_MODE;
+  const isMockMode = mockMode === 'true' || mockMode === true || !process.env.TWILIO_ACCOUNT_SID;
+
+  console.log('SMS Service - Mock Mode:', isMockMode, '| SMS_MOCK_MODE env:', mockMode);
 
   if (isMockMode) {
     console.log('========================================');
@@ -16,17 +31,19 @@ export const sendSMS = async (phoneNumber, message) => {
     return { success: true, mock: true };
   }
 
-  // Twilio integration
+  // Twilio integration - only runs if mock mode is false
+  const accountSid = process.env.TWILIO_ACCOUNT_SID;
+  const authToken = process.env.TWILIO_AUTH_TOKEN;
+  const twilioPhone = process.env.TWILIO_PHONE_NUMBER;
+
+  if (!accountSid || !authToken || !twilioPhone) {
+    console.log('Twilio credentials missing, falling back to mock mode');
+    console.log(`Mock SMS to ${phoneNumber}: ${message}`);
+    return { success: true, mock: true };
+  }
+
   try {
-    const accountSid = process.env.TWILIO_ACCOUNT_SID;
-    const authToken = process.env.TWILIO_AUTH_TOKEN;
-    const twilioPhone = process.env.TWILIO_PHONE_NUMBER;
-
-    if (!accountSid || !authToken || !twilioPhone) {
-      throw new Error('Twilio credentials not configured');
-    }
-
-    // Dynamic import for Twilio (optional dependency)
+    // Dynamic import for Twilio
     const twilio = await import('twilio');
     const client = twilio.default(accountSid, authToken);
 
@@ -46,6 +63,6 @@ export const sendSMS = async (phoneNumber, message) => {
 };
 
 export const sendVerificationCode = async (phoneNumber, code) => {
-  const message = `VedZeb: თქვენი დადასტურების კოდია: ${code}. კოდი მოქმედებს 10 წუთის განმავლობაში.`;
+  const message = `VEDZEB: თქვენი დადასტურების კოდია: ${code}. კოდი მოქმედებს 10 წუთის განმავლობაში.`;
   return sendSMS(phoneNumber, message);
 };

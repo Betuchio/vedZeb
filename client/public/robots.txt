@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://client-nine-ashen-21.vercel.app/sitemap.xml

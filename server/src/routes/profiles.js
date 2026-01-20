@@ -39,10 +39,13 @@ router.get(
   [
     query('page').optional().isInt({ min: 1 }),
     query('limit').optional().isInt({ min: 1, max: 50 }),
-    query('type').optional().isIn(['searching_sibling', 'searching_child', 'searching_parent']),
+    query('type').optional().isIn(['searching_sibling', 'searching_child', 'searching_parent', 'searching_relative']),
     query('gender').optional().isIn(['male', 'female', 'unknown']),
     query('birthYearFrom').optional().isInt({ min: 1900, max: 2100 }),
     query('birthYearTo').optional().isInt({ min: 1900, max: 2100 }),
+    query('birthMonth').optional().isInt({ min: 1, max: 12 }),
+    query('birthDay').optional().isInt({ min: 1, max: 31 }),
+    query('maternityHospital').optional().isString(),
     validate
   ],
   optionalAuth,
@@ -63,7 +66,7 @@ router.post(
     body('type')
       .notEmpty()
       .withMessage('Profile type is required')
-      .isIn(['searching_sibling', 'searching_child', 'searching_parent'])
+      .isIn(['searching_sibling', 'searching_child', 'searching_parent', 'searching_relative'])
       .withMessage('Invalid profile type'),
     body('firstName')
       .notEmpty()
@@ -78,6 +81,29 @@ router.post(
       .optional()
       .isInt({ min: 1900, max: new Date().getFullYear() })
       .withMessage('Invalid birth year'),
+    body('birthMonth')
+      .optional()
+      .isInt({ min: 1, max: 12 })
+      .withMessage('Invalid birth month'),
+    body('birthDay')
+      .optional()
+      .isInt({ min: 1, max: 31 })
+      .withMessage('Invalid birth day'),
+    body('maternityHospital')
+      .optional()
+      .isString(),
+    body('myBirthYear')
+      .optional()
+      .isInt({ min: 1900, max: new Date().getFullYear() })
+      .withMessage('Invalid birth year'),
+    body('myBirthMonth')
+      .optional()
+      .isInt({ min: 1, max: 12 })
+      .withMessage('Invalid birth month'),
+    body('myBirthDay')
+      .optional()
+      .isInt({ min: 1, max: 31 })
+      .withMessage('Invalid birth day'),
     validate
   ],
   createProfile
@@ -90,7 +116,7 @@ router.put(
   [
     body('type')
       .optional()
-      .isIn(['searching_sibling', 'searching_child', 'searching_parent']),
+      .isIn(['searching_sibling', 'searching_child', 'searching_parent', 'searching_relative']),
     body('firstName')
       .optional()
       .isLength({ min: 2, max: 100 }),

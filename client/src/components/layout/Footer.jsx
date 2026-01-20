@@ -11,10 +11,8 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
           <div className="col-span-1 md:col-span-2">
             <Link to="/" className="flex items-center gap-3 mb-6">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
-                <span className="text-white font-bold text-xl">V</span>
-              </div>
-              <span className="text-2xl font-bold text-white">VedZeb</span>
+              <img src="/logo.svg" alt="VEDZEB Logo" className="w-12 h-12" />
+              <span className="text-2xl font-bold text-white">VEDZEB</span>
             </Link>
             <p className="text-slate-400 leading-relaxed max-w-md">
               {t('app.slogan')}
@@ -72,7 +70,7 @@ export default function Footer() {
 
         <div className="mt-12 pt-8 border-t border-slate-800 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-sm text-slate-500">
-            &copy; {currentYear} VedZeb. {t('footer.rights')}
+            &copy; {currentYear} VEDZEB. {t('footer.rights')}
           </p>
           <div className="flex items-center gap-4">
             <a href="mailto:contact@vedzeb.ge" className="text-slate-500 hover:text-white transition-colors">

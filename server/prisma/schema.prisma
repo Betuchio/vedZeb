@@ -11,6 +11,7 @@ enum ProfileType {
   searching_sibling
   searching_child
   searching_parent
+  searching_relative
 }
 
 enum Gender {
@@ -75,7 +76,10 @@ model Profile {
   birthDate             DateTime?
   birthDateApproximate  Boolean     @default(false)
   birthYear             Int?
+  birthMonth            Int?
+  birthDay              Int?
   birthPlace            String?
+  maternityHospital     String?
   lastKnownLocation     String?
   region                String?
   gender                Gender      @default(unknown)
@@ -83,6 +87,9 @@ model Profile {
   biologicalMotherInfo  Json?
   biologicalFatherInfo  Json?
   medicalHistory        String?     @db.Text
+  myBirthYear           Int?
+  myBirthMonth          Int?
+  myBirthDay            Int?
   isActive              Boolean     @default(true)
   createdAt             DateTime    @default(now())
   updatedAt             DateTime    @updatedAt
@@ -95,6 +102,12 @@ model Profile {
   @@index([type])
   @@index([region])
   @@index([birthYear])
+  @@index([birthMonth])
+  @@index([birthDay])
+  @@index([maternityHospital])
+  @@index([myBirthYear])
+  @@index([myBirthMonth])
+  @@index([myBirthDay])
   @@index([isActive])
 }
 

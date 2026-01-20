@@ -13,6 +13,11 @@ const REGIONS = [
   'southOssetia', 'other'
 ];
 
+const MATERNITY_HOSPITALS = [
+  'maternity_1', 'maternity_2', 'maternity_3', 'maternity_4', 'maternity_5',
+  'chachava', 'gudushauri', 'other'
+];
+
 export default function SearchPage() {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -23,7 +28,10 @@ export default function SearchPage() {
     region: searchParams.get('region') || '',
     gender: searchParams.get('gender') || '',
     birthYearFrom: searchParams.get('birthYearFrom') || '',
-    birthYearTo: searchParams.get('birthYearTo') || ''
+    birthYearTo: searchParams.get('birthYearTo') || '',
+    birthMonth: searchParams.get('birthMonth') || '',
+    birthDay: searchParams.get('birthDay') || '',
+    maternityHospital: searchParams.get('maternityHospital') || ''
   });
 
   const [page, setPage] = useState(1);
@@ -59,7 +67,10 @@ export default function SearchPage() {
       region: '',
       gender: '',
       birthYearFrom: '',
-      birthYearTo: ''
+      birthYearTo: '',
+      birthMonth: '',
+      birthDay: '',
+      maternityHospital: ''
     });
     setPage(1);
   };
@@ -68,7 +79,8 @@ export default function SearchPage() {
     { value: '', label: t('search.types.all') },
     { value: 'searching_sibling', label: t('search.types.searching_sibling') },
     { value: 'searching_child', label: t('search.types.searching_child') },
-    { value: 'searching_parent', label: t('search.types.searching_parent') }
+    { value: 'searching_parent', label: t('search.types.searching_parent') },
+    { value: 'searching_relative', label: t('search.types.searching_relative') }
   ];
 
   const genderOptions = [
@@ -79,7 +91,7 @@ export default function SearchPage() {
   ];
 
   const regionOptions = [
-    { value: '', label: t('search.genders.all') },
+    { value: '', label: t('search.types.all') },
     ...REGIONS.map(r => ({ value: r, label: t(`regions.${r}`) }))
   ];
 
@@ -90,6 +102,27 @@ export default function SearchPage() {
       value: String(currentYear - i),
       label: String(currentYear - i)
     }))
+  ];
+
+  const monthOptions = [
+    { value: '', label: '-' },
+    ...Array.from({ length: 12 }, (_, i) => ({
+      value: String(i + 1),
+      label: String(i + 1).padStart(2, '0')
+    }))
+  ];
+
+  const dayOptions = [
+    { value: '', label: '-' },
+    ...Array.from({ length: 31 }, (_, i) => ({
+      value: String(i + 1),
+      label: String(i + 1).padStart(2, '0')
+    }))
+  ];
+
+  const maternityHospitalOptions = [
+    { value: '', label: t('search.types.all') },
+    ...MATERNITY_HOSPITALS.map(h => ({ value: h, label: t(`maternityHospitals.${h}`) }))
   ];
 
   return (
@@ -170,6 +203,28 @@ export default function SearchPage() {
                   />
                 </div>
               </div>
+
+              <div className="grid grid-cols-2 gap-2">
+                <Select
+                  label={t('profile.create.birthMonth')}
+                  options={monthOptions}
+                  value={filters.birthMonth}
+                  onChange={(e) => handleFilterChange('birthMonth', e.target.value)}
+                />
+                <Select
+                  label={t('profile.create.birthDay')}
+                  options={dayOptions}
+                  value={filters.birthDay}
+                  onChange={(e) => handleFilterChange('birthDay', e.target.value)}
+                />
+              </div>
+
+              <Select
+                label={t('profile.create.maternityHospital')}
+                options={maternityHospitalOptions}
+                value={filters.maternityHospital}
+                onChange={(e) => handleFilterChange('maternityHospital', e.target.value)}
+              />
             </div>
           </div>
         </aside>

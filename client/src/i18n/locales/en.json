@@ -1,6 +1,6 @@
 {
   "app": {
-    "name": "VedZeb",
+    "name": "VEDZEB",
     "slogan": "Platform for Finding Lost Family Members"
   },
   "nav": {
@@ -27,7 +27,11 @@
       "searching": "Searching"
     },
     "recentProfiles": "Recently Added",
-    "viewAll": "View All"
+    "viewAll": "View All",
+    "podcast": {
+      "title": "Watch Podcast",
+      "watch": "Watch on YouTube"
+    }
   },
   "search": {
     "title": "Search",
@@ -46,7 +50,8 @@
       "all": "All",
       "searching_sibling": "Searching for Sibling",
       "searching_child": "Searching for Child",
-      "searching_parent": "Searching for Parent"
+      "searching_parent": "Searching for Parent",
+      "searching_relative": "Searching for Relative"
     },
     "genders": {
       "all": "All",
@@ -83,9 +88,12 @@
       "firstName": "First Name",
       "lastName": "Last Name",
       "birthDate": "Date of Birth",
+      "birthMonth": "Birth Month",
+      "birthDay": "Birth Day",
       "approximate": "Approximate",
       "birthYear": "Birth Year",
       "birthPlace": "Place of Birth",
+      "maternityHospital": "Maternity Hospital",
       "region": "Region",
       "gender": "Gender",
       "story": "Story / Details",
@@ -98,7 +106,61 @@
       "next": "Next",
       "back": "Back",
       "submit": "Publish",
-      "success": "Listing created successfully"
+      "success": "Listing created successfully",
+      "contextLabels": {
+        "searching_sibling": {
+          "firstName": "Sibling's Name",
+          "lastName": "Sibling's Last Name",
+          "birthYear": "Sibling's Birth Year",
+          "birthMonth": "Sibling's Birth Month",
+          "birthDay": "Sibling's Birth Day",
+          "birthPlace": "Sibling's Birthplace",
+          "gender": "Sibling's Gender",
+          "maternityHospital": "Maternity Hospital Where Born",
+          "myBirthYear": "My Birth Year",
+          "myBirthMonth": "My Birth Month",
+          "myBirthDay": "My Birth Day"
+        },
+        "searching_child": {
+          "firstName": "Child's Name",
+          "lastName": "Child's Last Name",
+          "birthYear": "Child's Birth Year",
+          "birthMonth": "Child's Birth Month",
+          "birthDay": "Child's Birth Day",
+          "birthPlace": "Child's Birthplace",
+          "gender": "Child's Gender",
+          "maternityHospital": "Maternity Hospital Where Born",
+          "myBirthYear": "Year of Birth",
+          "myBirthMonth": "Month of Birth",
+          "myBirthDay": "Day of Birth"
+        },
+        "searching_parent": {
+          "firstName": "Parent's Name",
+          "lastName": "Parent's Last Name",
+          "birthYear": "Parent's Estimated Birth Year",
+          "birthMonth": "Parent's Estimated Birth Month",
+          "birthDay": "Parent's Estimated Birth Day",
+          "birthPlace": "Parent's Birthplace",
+          "gender": "Parent's Gender",
+          "maternityHospital": "Maternity Hospital Where I Was Born",
+          "myBirthYear": "My Birth Year",
+          "myBirthMonth": "My Birth Month",
+          "myBirthDay": "My Birth Day"
+        },
+        "searching_relative": {
+          "firstName": "Relative's Name",
+          "lastName": "Relative's Last Name",
+          "birthYear": "Relative's Birth Year",
+          "birthMonth": "Relative's Birth Month",
+          "birthDay": "Relative's Birth Day",
+          "birthPlace": "Relative's Birthplace",
+          "gender": "Relative's Gender",
+          "maternityHospital": "Maternity Hospital",
+          "myBirthYear": "My Birth Year",
+          "myBirthMonth": "My Birth Month",
+          "myBirthDay": "My Birth Day"
+        }
+      }
     },
     "edit": {
       "title": "Edit Profile",
@@ -110,6 +172,7 @@
     "title": "Login",
     "phoneLabel": "Phone Number",
     "phonePlaceholder": "+995 XXX XXX XXX",
+    "invalidPhone": "Invalid phone number",
     "sendCode": "Send Code",
     "codeLabel": "Verification Code",
     "codePlaceholder": "Enter 6-digit code",
@@ -155,8 +218,8 @@
     "title": "About Us",
     "mission": "Our Mission",
     "missionText": "To help lost family members find each other.",
-    "whatIsVedzeb": "What is VedZeb?",
-    "whatIsVedzebText": "VedZeb (ვეძებ - 'I'm searching' in Georgian) is a platform dedicated to helping people find their lost family members, particularly those who were adopted or taken at birth. We believe every person has the right to know their family history and reconnect with their biological relatives.",
+    "whatIsVedzeb": "What is VEDZEB?",
+    "whatIsVedzebText": "VEDZEB (ვეძებ - 'I'm searching' in Georgian) is a platform dedicated to helping people find their lost family members, particularly those who were adopted or taken at birth. We believe every person has the right to know their family history and reconnect with their biological relatives.",
     "howItWorks": "How It Works",
     "howItWorksItems": {
       "1": "Create a profile with information about the person you're searching for",
@@ -171,7 +234,7 @@
   "privacy": {
     "title": "Privacy Policy",
     "intro": "Introduction",
-    "introText": "VedZeb ('we', 'our', or 'us') is committed to protecting your privacy. This Privacy Policy explains how we collect, use, and safeguard your information when you use our platform.",
+    "introText": "VEDZEB ('we', 'our', or 'us') is committed to protecting your privacy. This Privacy Policy explains how we collect, use, and safeguard your information when you use our platform.",
     "infoCollect": "Information We Collect",
     "infoCollectItems": {
       "phone": "Phone Number: Required for account verification and authentication.",
@@ -220,6 +283,16 @@
     "close": "Close",
     "required": "Required",
     "optional": "Optional"
+  },
+  "maternityHospitals": {
+    "maternity_1": "Maternity Hospital #1",
+    "maternity_2": "Maternity Hospital #2",
+    "maternity_3": "Maternity Hospital #3",
+    "maternity_4": "Maternity Hospital #4",
+    "maternity_5": "Maternity Hospital #5",
+    "chachava": "Chachava Maternity Hospital",
+    "gudushauri": "Gudushauri Maternity Hospital",
+    "other": "Other"
   },
   "regions": {
     "tbilisi": "Tbilisi",

@@ -1,12 +1,17 @@
 import jwt from 'jsonwebtoken';
 import { v4 as uuidv4 } from 'uuid';
-import { prisma } from '../app.js';
+import { prisma } from '../lib/prisma.js';
 
 export const generateAccessToken = (userId) => {
+  // Ensure expiresIn is a valid value (default to 15 minutes)
+  const expiresIn = process.env.JWT_EXPIRES_IN && process.env.JWT_EXPIRES_IN.trim()
+    ? process.env.JWT_EXPIRES_IN.trim()
+    : '15m';
+
   return jwt.sign(
     { userId },
     process.env.JWT_SECRET,
-    { expiresIn: process.env.JWT_EXPIRES_IN || '15m' }
+    { expiresIn }
   );
 };
 

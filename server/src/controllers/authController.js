@@ -1,4 +1,5 @@
-import { prisma } from '../app.js';
+import { parsePhoneNumber, isValidPhoneNumber } from 'libphonenumber-js';
+import { prisma } from '../lib/prisma.js';
 import { AppError } from '../middleware/errorHandler.js';
 import { generateVerificationCode, sendVerificationCode } from '../services/sms.js';
 import {
@@ -13,8 +14,18 @@ export const sendCode = async (req, res, next) => {
   try {
     const { phone } = req.body;
 
-    // Normalize phone number (remove spaces, ensure format)
-    const normalizedPhone = phone.replace(/\s+/g, '').trim();
+    if (!phone) {
+      throw new AppError('Phone number is required', 400);
+    }
+
+    // Validate phone number format
+    if (!isValidPhoneNumber(phone)) {
+      throw new AppError('Invalid phone number format', 400);
+    }
+
+    // Parse and normalize phone number
+    const parsedPhone = parsePhoneNumber(phone);
+    const normalizedPhone = parsedPhone.format('E.164'); // +995XXX...
 
     // Find or create user
     let user = await prisma.user.findUnique({
@@ -62,7 +73,17 @@ export const verifyCode = async (req, res, next) => {
   try {
     const { phone, code } = req.body;
 
-    const normalizedPhone = phone.replace(/\s+/g, '').trim();
+    if (!phone || !code) {
+      throw new AppError('Phone number and code are required', 400);
+    }
+
+    // Validate and normalize phone
+    if (!isValidPhoneNumber(phone)) {
+      throw new AppError('Invalid phone number format', 400);
+    }
+
+    const parsedPhone = parsePhoneNumber(phone);
+    const normalizedPhone = parsedPhone.format('E.164');
 
     const user = await prisma.user.findUnique({
       where: { phone: normalizedPhone }

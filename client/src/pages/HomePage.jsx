@@ -38,48 +38,84 @@ export default function HomePage() {
           }}
         ></div>
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-32">
-          <div className="text-center max-w-4xl mx-auto animate-fade-in">
-            <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight">
-              {t('home.hero.title')}
-            </h1>
-            <p className="text-xl md:text-2xl text-indigo-100 mb-10 leading-relaxed">
-              {t('home.hero.subtitle')}
-            </p>
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+          <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
+            {/* Left side - Main content */}
+            <div className="flex-1 text-center lg:text-left animate-fade-in">
+              <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
+                {t('home.hero.title')}
+              </h1>
+              <p className="text-lg md:text-xl text-indigo-100 mb-8 leading-relaxed">
+                {t('home.hero.subtitle')}
+              </p>
 
-            <form onSubmit={handleSearch} className="max-w-2xl mx-auto mb-8">
-              <div className="flex flex-col sm:flex-row gap-3">
-                <div className="relative flex-1">
-                  <input
-                    type="text"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder={t('home.hero.searchPlaceholder')}
-                    className="w-full px-6 py-4 rounded-2xl text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-4 focus:ring-white/30 shadow-xl text-lg"
-                  />
-                  <div className="absolute right-3 top-1/2 -translate-y-1/2 hidden sm:block">
-                    <button
-                      type="submit"
-                      className="px-6 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl font-semibold hover:from-indigo-700 hover:to-purple-700 transition-all"
-                    >
-                      {t('home.hero.searchButton')}
-                    </button>
+              <form onSubmit={handleSearch} className="max-w-xl mb-6">
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <div className="relative flex-1">
+                    <input
+                      type="text"
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      placeholder={t('home.hero.searchPlaceholder')}
+                      className="w-full px-5 py-3 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-4 focus:ring-white/30 shadow-xl"
+                    />
+                    <div className="absolute right-2 top-1/2 -translate-y-1/2 hidden sm:block">
+                      <button
+                        type="submit"
+                        className="px-4 py-1.5 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg font-semibold hover:from-indigo-700 hover:to-purple-700 transition-all text-sm"
+                      >
+                        {t('home.hero.searchButton')}
+                      </button>
+                    </div>
                   </div>
+                  <button
+                    type="submit"
+                    className="sm:hidden px-6 py-3 bg-white text-indigo-600 rounded-xl font-semibold hover:bg-indigo-50 transition-all shadow-xl"
+                  >
+                    {t('home.hero.searchButton')}
+                  </button>
                 </div>
-                <button
-                  type="submit"
-                  className="sm:hidden px-6 py-4 bg-white text-indigo-600 rounded-2xl font-semibold hover:bg-indigo-50 transition-all shadow-xl"
-                >
-                  {t('home.hero.searchButton')}
-                </button>
-              </div>
-            </form>
+              </form>
 
-            <Link to="/create-profile">
-              <button className="px-8 py-4 bg-white/10 backdrop-blur-sm border-2 border-white/30 text-white rounded-2xl font-semibold hover:bg-white/20 transition-all">
-                {t('home.hero.addProfile')}
-              </button>
-            </Link>
+              <Link to="/create-profile">
+                <button className="px-6 py-3 bg-white/10 backdrop-blur-sm border-2 border-white/30 text-white rounded-xl font-semibold hover:bg-white/20 transition-all">
+                  {t('home.hero.addProfile')}
+                </button>
+              </Link>
+            </div>
+
+            {/* Right side - Podcast video */}
+            <div className="w-full lg:w-80 xl:w-96 flex-shrink-0 animate-fade-in" style={{ animationDelay: '0.2s' }}>
+              <a
+                href="https://www.youtube.com/watch?v=1Nm5WrefQK4"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block group"
+              >
+                <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-3 border border-white/20">
+                  <p className="text-white text-sm font-medium mb-2 text-center">
+                    {t('home.podcast.title')}
+                  </p>
+                  <div className="relative rounded-xl overflow-hidden">
+                    <img
+                      src="https://img.youtube.com/vi/1Nm5WrefQK4/mqdefault.jpg"
+                      alt="VEDZEB Podcast"
+                      className="w-full aspect-video object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                    <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors flex items-center justify-center">
+                      <div className="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                        <svg className="w-6 h-6 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M8 5v14l11-7z"/>
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                  <p className="text-indigo-200 text-xs mt-2 text-center group-hover:text-white transition-colors">
+                    {t('home.podcast.watch')}
+                  </p>
+                </div>
+              </a>
+            </div>
           </div>
         </div>
 

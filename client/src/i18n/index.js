@@ -17,12 +17,14 @@ i18n
   .use(initReactI18next)
   .init({
     resources,
+    lng: 'ka', // Default language is Georgian
     fallbackLng: 'ka',
     interpolation: {
       escapeValue: false
     },
     detection: {
-      order: ['localStorage', 'navigator'],
+      order: ['localStorage', 'querystring', 'navigator'],
+      lookupQuerystring: 'lng',
       caches: ['localStorage']
     }
   });

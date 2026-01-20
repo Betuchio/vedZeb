@@ -12,6 +12,11 @@ const REGIONS = [
   'southOssetia', 'other'
 ];
 
+const MATERNITY_HOSPITALS = [
+  'maternity_1', 'maternity_2', 'maternity_3', 'maternity_4', 'maternity_5',
+  'chachava', 'gudushauri', 'other'
+];
+
 export default function CreateProfilePage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -23,24 +28,43 @@ export default function CreateProfilePage() {
     firstName: '',
     lastName: '',
     birthYear: '',
+    birthMonth: '',
+    birthDay: '',
     birthDateApproximate: true,
     birthPlace: '',
+    maternityHospital: '',
     lastKnownLocation: '',
     region: '',
     gender: 'unknown',
     story: '',
     biologicalMotherInfo: '',
     biologicalFatherInfo: '',
-    medicalHistory: ''
+    medicalHistory: '',
+    myBirthYear: '',
+    myBirthMonth: '',
+    myBirthDay: ''
   });
+
+  // Get context-aware label based on profile type
+  const getLabel = (field) => {
+    const contextLabel = t(`profile.create.contextLabels.${formData.type}.${field}`, { defaultValue: '' });
+    if (contextLabel) return contextLabel;
+    return t(`profile.create.${field}`);
+  };
 
   const createMutation = useMutation({
     mutationFn: async () => {
       const profileData = {
         ...formData,
         birthYear: formData.birthYear ? parseInt(formData.birthYear) : null,
+        birthMonth: formData.birthMonth ? parseInt(formData.birthMonth) : null,
+        birthDay: formData.birthDay ? parseInt(formData.birthDay) : null,
+        maternityHospital: formData.maternityHospital || null,
         biologicalMotherInfo: formData.biologicalMotherInfo || null,
-        biologicalFatherInfo: formData.biologicalFatherInfo || null
+        biologicalFatherInfo: formData.biologicalFatherInfo || null,
+        myBirthYear: formData.myBirthYear ? parseInt(formData.myBirthYear) : null,
+        myBirthMonth: formData.myBirthMonth ? parseInt(formData.myBirthMonth) : null,
+        myBirthDay: formData.myBirthDay ? parseInt(formData.myBirthDay) : null
       };
 
       const response = await profilesApi.create(profileData);
@@ -81,7 +105,8 @@ export default function CreateProfilePage() {
   const typeOptions = [
     { value: 'searching_sibling', label: t('search.types.searching_sibling') },
     { value: 'searching_child', label: t('search.types.searching_child') },
-    { value: 'searching_parent', label: t('search.types.searching_parent') }
+    { value: 'searching_parent', label: t('search.types.searching_parent') },
+    { value: 'searching_relative', label: t('search.types.searching_relative') }
   ];
 
   const genderOptions = [
@@ -102,6 +127,27 @@ export default function CreateProfilePage() {
       value: String(currentYear - i),
       label: String(currentYear - i)
     }))
+  ];
+
+  const monthOptions = [
+    { value: '', label: '-' },
+    ...Array.from({ length: 12 }, (_, i) => ({
+      value: String(i + 1),
+      label: String(i + 1).padStart(2, '0')
+    }))
+  ];
+
+  const dayOptions = [
+    { value: '', label: '-' },
+    ...Array.from({ length: 31 }, (_, i) => ({
+      value: String(i + 1),
+      label: String(i + 1).padStart(2, '0')
+    }))
+  ];
+
+  const maternityHospitalOptions = [
+    { value: '', label: '-' },
+    ...MATERNITY_HOSPITALS.map(h => ({ value: h, label: t(`maternityHospitals.${h}`) }))
   ];
 
   const steps = [
@@ -173,44 +219,92 @@ export default function CreateProfilePage() {
                 />
 
                 <Input
-                  label={t('profile.create.firstName') + ' *'}
+                  label={getLabel('firstName') + ' *'}
                   value={formData.firstName}
                   onChange={(e) => handleChange('firstName', e.target.value)}
                 />
 
                 <Input
-                  label={t('profile.create.lastName')}
+                  label={getLabel('lastName')}
                   value={formData.lastName}
                   onChange={(e) => handleChange('lastName', e.target.value)}
                 />
 
                 <Select
-                  label={t('profile.create.gender')}
+                  label={getLabel('gender')}
                   options={genderOptions}
                   value={formData.gender}
                   onChange={(e) => handleChange('gender', e.target.value)}
                 />
 
-                <div className="grid grid-cols-2 gap-4">
-                  <Select
-                    label={t('profile.create.birthYear')}
-                    options={yearOptions}
-                    value={formData.birthYear}
-                    onChange={(e) => handleChange('birthYear', e.target.value)}
-                  />
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    {getLabel('birthYear')}
+                  </label>
+                  <div className="grid grid-cols-3 gap-2">
+                    <Select
+                      options={yearOptions}
+                      value={formData.birthYear}
+                      onChange={(e) => handleChange('birthYear', e.target.value)}
+                      placeholder={t('profile.create.birthYear')}
+                    />
+                    <Select
+                      options={monthOptions}
+                      value={formData.birthMonth}
+                      onChange={(e) => handleChange('birthMonth', e.target.value)}
+                      placeholder={t('profile.create.birthMonth')}
+                    />
+                    <Select
+                      options={dayOptions}
+                      value={formData.birthDay}
+                      onChange={(e) => handleChange('birthDay', e.target.value)}
+                      placeholder={t('profile.create.birthDay')}
+                    />
+                  </div>
+                  <label className="flex items-center mt-2">
+                    <input
+                      type="checkbox"
+                      checked={formData.birthDateApproximate}
+                      onChange={(e) => handleChange('birthDateApproximate', e.target.checked)}
+                      className="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+                    />
+                    <span className="ml-2 text-sm text-gray-600">
+                      {t('profile.create.approximate')}
+                    </span>
+                  </label>
+                </div>
 
-                  <div className="flex items-end pb-2">
-                    <label className="flex items-center">
-                      <input
-                        type="checkbox"
-                        checked={formData.birthDateApproximate}
-                        onChange={(e) => handleChange('birthDateApproximate', e.target.checked)}
-                        className="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
-                      />
-                      <span className="ml-2 text-sm text-gray-600">
-                        {t('profile.create.approximate')}
-                      </span>
-                    </label>
+                <Select
+                  label={getLabel('maternityHospital')}
+                  options={maternityHospitalOptions}
+                  value={formData.maternityHospital}
+                  onChange={(e) => handleChange('maternityHospital', e.target.value)}
+                />
+
+                {/* My birth date - for people searching for siblings, children, parents, or relatives */}
+                <div className="pt-4 border-t">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    {getLabel('myBirthYear')}
+                  </label>
+                  <div className="grid grid-cols-3 gap-2">
+                    <Select
+                      options={yearOptions}
+                      value={formData.myBirthYear}
+                      onChange={(e) => handleChange('myBirthYear', e.target.value)}
+                      placeholder={t('profile.create.birthYear')}
+                    />
+                    <Select
+                      options={monthOptions}
+                      value={formData.myBirthMonth}
+                      onChange={(e) => handleChange('myBirthMonth', e.target.value)}
+                      placeholder={t('profile.create.birthMonth')}
+                    />
+                    <Select
+                      options={dayOptions}
+                      value={formData.myBirthDay}
+                      onChange={(e) => handleChange('myBirthDay', e.target.value)}
+                      placeholder={t('profile.create.birthDay')}
+                    />
                   </div>
                 </div>
               </div>
@@ -219,7 +313,7 @@ export default function CreateProfilePage() {
             {step === 2 && (
               <div className="space-y-4">
                 <Input
-                  label={t('profile.create.birthPlace')}
+                  label={getLabel('birthPlace')}
                   value={formData.birthPlace}
                   onChange={(e) => handleChange('birthPlace', e.target.value)}
                 />
@@ -315,15 +409,28 @@ export default function CreateProfilePage() {
 
                 <div className="space-y-2 text-sm">
                   <p><strong>{t('profile.create.typeLabel')}:</strong> {t(`search.types.${formData.type}`)}</p>
-                  <p><strong>{t('profile.create.firstName')}:</strong> {formData.firstName} {formData.lastName}</p>
-                  {formData.birthYear && (
-                    <p><strong>{t('profile.create.birthYear')}:</strong> {formData.birthYear} {formData.birthDateApproximate && '(~)'}</p>
+                  <p><strong>{getLabel('firstName')}:</strong> {formData.firstName} {formData.lastName}</p>
+                  {(formData.birthYear || formData.birthMonth || formData.birthDay) && (
+                    <p>
+                      <strong>{getLabel('birthYear')}:</strong>{' '}
+                      {[formData.birthYear, formData.birthMonth?.padStart?.(2, '0') || formData.birthMonth, formData.birthDay?.padStart?.(2, '0') || formData.birthDay].filter(Boolean).join('-')}
+                      {formData.birthDateApproximate && ' (~)'}
+                    </p>
+                  )}
+                  {formData.maternityHospital && (
+                    <p><strong>{getLabel('maternityHospital')}:</strong> {t(`maternityHospitals.${formData.maternityHospital}`)}</p>
                   )}
                   {formData.region && (
                     <p><strong>{t('profile.create.region')}:</strong> {t(`regions.${formData.region}`)}</p>
                   )}
                   {formData.birthPlace && (
-                    <p><strong>{t('profile.create.birthPlace')}:</strong> {formData.birthPlace}</p>
+                    <p><strong>{getLabel('birthPlace')}:</strong> {formData.birthPlace}</p>
+                  )}
+                  {(formData.myBirthYear || formData.myBirthMonth || formData.myBirthDay) && (
+                    <p>
+                      <strong>{getLabel('myBirthYear')}:</strong>{' '}
+                      {[formData.myBirthYear, formData.myBirthMonth?.padStart?.(2, '0') || formData.myBirthMonth, formData.myBirthDay?.padStart?.(2, '0') || formData.myBirthDay].filter(Boolean).join('-')}
+                    </p>
                   )}
                   {formData.story && (
                     <p><strong>{t('profile.create.story')}:</strong> {formData.story}</p>

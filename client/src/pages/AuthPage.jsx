@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
 import { authApi } from '../services/api';
-import { Button, Input, Card } from '../components/common';
+import { Button, Input, Card, PhoneInput, validatePhoneNumber } from '../components/common';
 
 export default function AuthPage() {
   const { t } = useTranslation();
@@ -15,6 +15,7 @@ export default function AuthPage() {
   const [code, setCode] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [phoneError, setPhoneError] = useState('');
   const [countdown, setCountdown] = useState(0);
 
   useEffect(() => {
@@ -27,6 +28,15 @@ export default function AuthPage() {
   const handleSendCode = async (e) => {
     e.preventDefault();
     setError('');
+    setPhoneError('');
+
+    // Validate phone number
+    const validation = validatePhoneNumber(phone);
+    if (!validation.valid) {
+      setPhoneError(t('auth.invalidPhone') || 'არასწორი ტელეფონის ნომერი');
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -95,12 +105,11 @@ export default function AuthPage() {
 
           {step === 'phone' ? (
             <form onSubmit={handleSendCode}>
-              <Input
+              <PhoneInput
                 label={t('auth.phoneLabel')}
-                type="tel"
-                placeholder={t('auth.phonePlaceholder')}
                 value={phone}
-                onChange={(e) => setPhone(e.target.value)}
+                onChange={setPhone}
+                error={phoneError}
                 className="mb-6"
               />
 
@@ -108,7 +117,7 @@ export default function AuthPage() {
                 type="submit"
                 className="w-full"
                 loading={loading}
-                disabled={!phone || phone.length < 9}
+                disabled={!phone}
               >
                 {t('auth.sendCode')}
               </Button>
