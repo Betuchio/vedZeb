@@ -2,21 +2,33 @@ import { useTranslation } from 'react-i18next';
 import { Card } from '../components/common';
 
 export default function FilmographyPage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const currentLang = i18n.language;
 
   const films = [
     {
       id: 1,
-      title: 'მოპარული ბავშვები',
-      titleEn: 'Stolen Children',
+      title: {
+        ka: 'მოპარული ბავშვები',
+        en: 'Stolen Children',
+        ru: 'Украденные дети'
+      },
       year: 2025,
-      description: 'დოკუმენტური ფილმი, რომელიც ამხელს ტრეფიკინგის სქემას - ათიათასობით ახალშობილი განაცალკევეს მათი ოჯახებისგან.',
-      descriptionEn: 'Documentary exposing a trafficking scheme that separated tens of thousands of newborns from their families.',
+      description: {
+        ka: 'დოკუმენტური ფილმი, რომელიც ამხელს ტრეფიკინგის სქემას - ათიათასობით ახალშობილი განაცალკევეს მათი ოჯახებისგან.',
+        en: 'Documentary exposing a trafficking scheme that separated tens of thousands of newborns from their families.',
+        ru: 'Документальный фильм, разоблачающий схему торговли людьми — десятки тысяч новорождённых были разлучены со своими семьями.'
+      },
       directors: 'Martyna Wojciechowska, Jowita Baraniecka',
       platform: 'hbo',
       videoUrl: 'https://www.hbomax.com/ge/en/movies/stolen-children/5be67ea5-d702-403f-93e3-3bfd0422aed6'
     }
   ];
+
+  const getLocalizedText = (textObj) => {
+    if (typeof textObj === 'string') return textObj;
+    return textObj[currentLang] || textObj.en || textObj.ka || '';
+  };
 
   return (
     <div className="container-page">
@@ -49,8 +61,8 @@ export default function FilmographyPage() {
                   <div className="flex-1 p-6">
                     <div className="flex items-start justify-between gap-4">
                       <div>
-                        <h3 className="text-xl font-semibold text-gray-900">{film.title}</h3>
-                        <p className="text-sm text-gray-500">{film.titleEn}</p>
+                        <h3 className="text-xl font-semibold text-gray-900">{getLocalizedText(film.title)}</h3>
+                        {currentLang !== 'en' && <p className="text-sm text-gray-500">{film.title.en}</p>}
                       </div>
                       <span className={`px-3 py-1 text-sm font-medium rounded-full flex-shrink-0 ${
                         film.platform === 'hbo'
@@ -60,7 +72,7 @@ export default function FilmographyPage() {
                         {film.year}
                       </span>
                     </div>
-                    <p className="mt-3 text-gray-600">{film.description}</p>
+                    <p className="mt-3 text-gray-600">{getLocalizedText(film.description)}</p>
                     {film.directors && (
                       <p className="mt-2 text-sm text-gray-500">
                         <span className="font-medium">{t('filmography.directors', 'რეჟისორები')}:</span> {film.directors}
