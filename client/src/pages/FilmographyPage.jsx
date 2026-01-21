@@ -38,6 +38,38 @@ export default function FilmographyPage() {
       },
       platform: 'youtube',
       videoUrl: 'https://www.youtube.com/watch?v=aqJGBRyjt6Y'
+    },
+    {
+      id: 3,
+      title: {
+        ka: 'ბრძოლა საქართველოს მოპარული ბავშვების მოსაძებნად',
+        en: "The fight to find Georgia's stolen babies after adoption scandal",
+        ru: 'Борьба за поиск украденных детей Грузии после скандала с усыновлением'
+      },
+      year: 2024,
+      description: {
+        ka: 'ABC Australia-ს სტატია საქართველოში ათწლეულების განმავლობაში მიმდინარე ბავშვების ტრეფიკინგის სკანდალის შესახებ.',
+        en: 'ABC Australia article about the decades-long baby trafficking scandal in Georgia, where mothers were told their babies died.',
+        ru: 'Статья ABC Australia о многолетнем скандале с торговлей детьми в Грузии, где матерям говорили, что их дети умерли.'
+      },
+      platform: 'abc',
+      videoUrl: 'https://www.abc.net.au/news/2024-03-02/the-fight-to-find-georgias-stolen-babies-after-adoption-scandal/103514808'
+    },
+    {
+      id: 4,
+      title: {
+        ka: 'საქართველოს ბავშვები - მკვდრად გამოცხადებულები და გაყიდულები',
+        en: "Georgia's Children - Declared Dead and Then Sold",
+        ru: 'Дети Грузии - объявленные мёртвыми и проданные'
+      },
+      year: 2024,
+      description: {
+        ka: 'ARTE-ს დოკუმენტური ფილმი საქართველოში მოპარული ბავშვების შესახებ - როგორ აცხადებდნენ ახალშობილებს მკვდრად და ყიდდნენ.',
+        en: 'ARTE documentary about stolen children in Georgia - how newborns were declared dead and sold.',
+        ru: 'Документальный фильм ARTE об украденных детях в Грузии - как новорождённых объявляли мёртвыми и продавали.'
+      },
+      platform: 'arte',
+      videoUrl: 'https://www.arte.tv/de/videos/120879-010-A/re-georgiens-kinder-fuer-tot-erklaert-und-dann-verkauft/'
     }
   ];
 
@@ -63,10 +95,20 @@ export default function FilmographyPage() {
                     <div className={`w-full md:w-56 h-40 md:h-full flex items-center justify-center ${
                       film.platform === 'hbo'
                         ? 'bg-gradient-to-br from-purple-900 to-purple-700'
-                        : 'bg-gradient-to-br from-red-600 to-red-500'
+                        : film.platform === 'youtube'
+                        ? 'bg-gradient-to-br from-red-600 to-red-500'
+                        : film.platform === 'abc'
+                        ? 'bg-gradient-to-br from-blue-800 to-blue-600'
+                        : film.platform === 'arte'
+                        ? 'bg-gradient-to-br from-orange-600 to-orange-500'
+                        : 'bg-gradient-to-br from-gray-700 to-gray-600'
                     }`}>
                       {film.platform === 'hbo' ? (
                         <span className="text-white text-3xl font-bold tracking-wider">HBO</span>
+                      ) : film.platform === 'abc' ? (
+                        <span className="text-white text-2xl font-bold tracking-wider">ABC</span>
+                      ) : film.platform === 'arte' ? (
+                        <span className="text-white text-2xl font-bold tracking-wider">ARTE</span>
                       ) : (
                         <svg className="w-16 h-16 text-white" fill="currentColor" viewBox="0 0 24 24">
                           <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/>
@@ -83,7 +125,13 @@ export default function FilmographyPage() {
                       <span className={`px-3 py-1 text-sm font-medium rounded-full flex-shrink-0 ${
                         film.platform === 'hbo'
                           ? 'bg-purple-100 text-purple-700'
-                          : 'bg-red-100 text-red-700'
+                          : film.platform === 'youtube'
+                          ? 'bg-red-100 text-red-700'
+                          : film.platform === 'abc'
+                          ? 'bg-blue-100 text-blue-700'
+                          : film.platform === 'arte'
+                          ? 'bg-orange-100 text-orange-700'
+                          : 'bg-gray-100 text-gray-700'
                       }`}>
                         {film.year}
                       </span>
@@ -101,15 +149,31 @@ export default function FilmographyPage() {
                       className={`inline-flex items-center gap-2 mt-4 font-medium transition-colors ${
                         film.platform === 'hbo'
                           ? 'text-purple-600 hover:text-purple-700'
-                          : 'text-red-600 hover:text-red-700'
+                          : film.platform === 'youtube'
+                          ? 'text-red-600 hover:text-red-700'
+                          : film.platform === 'abc'
+                          ? 'text-blue-600 hover:text-blue-700'
+                          : film.platform === 'arte'
+                          ? 'text-orange-600 hover:text-orange-700'
+                          : 'text-gray-600 hover:text-gray-700'
                       }`}
                     >
                       <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        {film.platform === 'abc' || film.platform === 'arte' ? (
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                        ) : (
+                          <>
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </>
+                        )}
                       </svg>
                       {film.platform === 'hbo'
                         ? t('filmography.watchHBO', 'ნახვა HBO Max-ზე')
+                        : film.platform === 'abc'
+                        ? t('filmography.watchABC', 'წაიკითხე ABC-ზე')
+                        : film.platform === 'arte'
+                        ? t('filmography.watchARTE', 'ნახვა ARTE-ზე')
                         : t('filmography.watch', 'ნახვა YouTube-ზე')
                       }
                     </a>

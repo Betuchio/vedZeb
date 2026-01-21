@@ -39,7 +39,9 @@
       "WebFetch(domain:ved-zeb.vercel.app)",
       "WebFetch(domain:www.youtube.com)",
       "WebSearch",
-      "Bash(vercel ls:*)"
+      "Bash(vercel ls:*)",
+      "WebFetch(domain:www.abc.net.au)",
+      "WebFetch(domain:www.arte.tv)"
     ]
   }
 }

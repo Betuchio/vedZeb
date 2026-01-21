@@ -282,8 +282,8 @@
     "directors": "Directors",
     "watch": "Watch on YouTube",
     "watchHBO": "Watch on HBO Max",
-    "submit": "Have a film to add?",
-    "submitText": "If you have created or know of a film/documentary on this topic, let us know and we'll add it to the list."
+    "watchABC": "Read on ABC",
+    "watchARTE": "Watch on ARTE"
   },
   "footer": {
     "rights": "All rights reserved"
