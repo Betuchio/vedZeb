@@ -93,7 +93,7 @@ export default function Header() {
             <span className="text-xl font-bold gradient-text hidden sm:block">VEDZEB</span>
           </Link>
 
-          <nav className="hidden md:flex items-center gap-1">
+          <nav className="hidden md:flex items-center gap-2">
             {navLinks.map((link) => (
               <NavLink
                 key={link.to}
@@ -112,22 +112,6 @@ export default function Header() {
           </nav>
 
           <div className="flex items-center gap-3">
-            <div className="flex items-center bg-slate-100 rounded-xl p-1">
-              {languages.map((lang) => (
-                <button
-                  key={lang.code}
-                  onClick={() => i18n.changeLanguage(lang.code)}
-                  className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-all ${
-                    i18n.language === lang.code
-                      ? 'bg-white text-indigo-600 shadow-sm'
-                      : 'text-slate-500 hover:text-slate-700'
-                  }`}
-                >
-                  {lang.name}
-                </button>
-              ))}
-            </div>
-
             {isAuthenticated ? (
               <div className="hidden md:flex items-center gap-2">
                 <Link to="/create-profile">
@@ -170,6 +154,22 @@ export default function Header() {
                 </button>
               </Link>
             )}
+
+            <div className="hidden md:flex items-center bg-slate-100 rounded-xl p-1">
+              {languages.map((lang) => (
+                <button
+                  key={lang.code}
+                  onClick={() => i18n.changeLanguage(lang.code)}
+                  className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-all ${
+                    i18n.language === lang.code
+                      ? 'bg-white text-indigo-600 shadow-sm'
+                      : 'text-slate-500 hover:text-slate-700'
+                  }`}
+                >
+                  {lang.name}
+                </button>
+              ))}
+            </div>
 
             <button
               className="md:hidden p-2 text-slate-600 hover:bg-slate-100 rounded-xl transition-colors"
@@ -259,6 +259,24 @@ export default function Header() {
                     {t('nav.login')}
                   </Link>
                 )}
+
+                <div className="mt-4 pt-4 border-t border-slate-100">
+                  <div className="flex items-center justify-center bg-slate-100 rounded-xl p-1">
+                    {languages.map((lang) => (
+                      <button
+                        key={lang.code}
+                        onClick={() => i18n.changeLanguage(lang.code)}
+                        className={`flex-1 px-3 py-2 text-sm font-semibold rounded-lg transition-all ${
+                          i18n.language === lang.code
+                            ? 'bg-white text-indigo-600 shadow-sm'
+                            : 'text-slate-500 hover:text-slate-700'
+                        }`}
+                      >
+                        {lang.name}
+                      </button>
+                    ))}
+                  </div>
+                </div>
               </div>
             </nav>
           </div>

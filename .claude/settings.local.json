@@ -41,7 +41,8 @@
       "WebSearch",
       "Bash(vercel ls:*)",
       "WebFetch(domain:www.abc.net.au)",
-      "WebFetch(domain:www.arte.tv)"
+      "WebFetch(domain:www.arte.tv)",
+      "Bash(vercel --prod:*)"
     ]
   }
 }
