@@ -33,8 +33,9 @@ export const uploadImage = async (fileBuffer, options = {}) => {
       publicId: result.public_id
     };
   } catch (error) {
-    console.error('Cloudinary upload error:', error);
-    throw new AppError('Failed to upload image', 500);
+    console.error('Cloudinary upload error:', error.message || error);
+    console.error('Cloudinary error details:', JSON.stringify(error, null, 2));
+    throw new AppError(`Failed to upload image: ${error.message || 'Unknown error'}`, 500);
   }
 };
 

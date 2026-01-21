@@ -322,6 +322,12 @@ export const uploadPhoto = async (req, res, next) => {
       throw new AppError('No file uploaded', 400);
     }
 
+    console.log('Uploading file:', {
+      mimetype: req.file.mimetype,
+      size: req.file.size,
+      bufferLength: req.file.buffer?.length
+    });
+
     // Upload to Cloudinary
     const { url, publicId } = await uploadImage(req.file.buffer, {
       folder: `vedzeb/profiles/${id}`
