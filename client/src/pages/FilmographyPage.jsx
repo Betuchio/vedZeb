@@ -120,20 +120,6 @@ export default function FilmographyPage() {
           ))}
         </div>
 
-        <div className="mt-12 p-6 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-2xl">
-          <h2 className="text-xl font-semibold text-gray-900 mb-3">
-            {t('filmography.submit', 'გაქვთ ფილმი დასამატებელი?')}
-          </h2>
-          <p className="text-gray-600 mb-4">
-            {t('filmography.submitText', 'თუ თქვენ შექმენით ან იცით ფილმი/დოკუმენტური ამ თემაზე, გვაცნობეთ და დავამატებთ სიაში.')}
-          </p>
-          <a
-            href="/contact"
-            className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition-colors"
-          >
-            {t('nav.contact')}
-          </a>
-        </div>
       </div>
     </div>
   );
