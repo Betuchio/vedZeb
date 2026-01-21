@@ -18,23 +18,24 @@ export const uploadImage = async (fileBuffer, options = {}) => {
     ]
   };
 
-  return new Promise((resolve, reject) => {
-    const uploadStream = cloudinary.uploader.upload_stream(
-      { ...defaultOptions, ...options },
-      (error, result) => {
-        if (error) {
-          reject(new AppError('Failed to upload image', 500));
-        } else {
-          resolve({
-            url: result.secure_url,
-            publicId: result.public_id
-          });
-        }
-      }
-    );
+  try {
+    // Convert buffer to base64 data URI for Vercel serverless compatibility
+    const base64String = fileBuffer.toString('base64');
+    const dataUri = `data:image/jpeg;base64,${base64String}`;
 
-    uploadStream.end(fileBuffer);
-  });
+    const result = await cloudinary.uploader.upload(dataUri, {
+      ...defaultOptions,
+      ...options
+    });
+
+    return {
+      url: result.secure_url,
+      publicId: result.public_id
+    };
+  } catch (error) {
+    console.error('Cloudinary upload error:', error);
+    throw new AppError('Failed to upload image', 500);
+  }
 };
 
 export const deleteImage = async (publicId) => {
