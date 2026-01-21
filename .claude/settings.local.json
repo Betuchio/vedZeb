@@ -33,7 +33,10 @@
       "Bash(curl:*)",
       "Bash(npx prisma:*)",
       "Bash(vercel env pull:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "WebFetch(domain:ved-zeb.vercel.app)"
     ]
   }
 }

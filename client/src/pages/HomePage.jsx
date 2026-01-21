@@ -144,12 +144,12 @@ export default function HomePage() {
             </div>
 
             <div className="text-center p-8 card-solid animate-slide-up" style={{ animationDelay: '0.1s' }}>
-              <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center">
+              <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-pink-500 to-rose-600 flex items-center justify-center">
                 <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                 </svg>
               </div>
-              <div className="text-4xl font-bold text-emerald-600 mb-2">0</div>
+              <div className="text-4xl font-bold text-pink-600 mb-2">0</div>
               <div className="text-slate-600 font-medium">{t('home.stats.reunited')}</div>
             </div>
 
