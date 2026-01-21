@@ -77,7 +77,7 @@ export default function ContactPage() {
 
         <div className="mt-8 text-center text-gray-600">
           <p className="mb-2">
-            <strong>Email:</strong> contact@vedzeb.ge
+            <strong>Email:</strong> vedzebgeorgia@gmail.com
           </p>
         </div>
       </div>

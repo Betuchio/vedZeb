@@ -73,7 +73,7 @@ export default function Footer() {
             &copy; {currentYear} VEDZEB. {t('footer.rights')}
           </p>
           <div className="flex items-center gap-4">
-            <a href="mailto:contact@vedzeb.ge" className="text-slate-500 hover:text-white transition-colors">
+            <a href="mailto:vedzebgeorgia@gmail.com" className="text-slate-500 hover:text-white transition-colors">
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
               </svg>
