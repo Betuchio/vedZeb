@@ -61,73 +61,78 @@ export default function App() {
   }
 
   return (
-    <Layout>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/search" element={<SearchPage />} />
-        <Route path="/profile/:id" element={<ProfilePage />} />
-        <Route path="/about" element={<AboutPage />} />
-        <Route path="/contact" element={<ContactPage />} />
-        <Route path="/privacy" element={<PrivacyPage />} />
-        <Route path="/filmography" element={<FilmographyPage />} />
+    <Routes>
+      {/* Admin Routes - outside main Layout */}
+      <Route path="/admin/login" element={<AdminLogin />} />
+      <Route path="/admin" element={<AdminLayout />}>
+        <Route index element={<AdminDashboard />} />
+        <Route path="users" element={<AdminUsers />} />
+        <Route path="profiles" element={<AdminProfiles />} />
+        <Route path="messages" element={<AdminMessages />} />
+        <Route path="audit" element={<AdminAuditLog />} />
+      </Route>
 
-        <Route
-          path="/auth"
-          element={
-            <PublicOnlyRoute>
-              <AuthPage />
-            </PublicOnlyRoute>
-          }
-        />
+      {/* Main Site Routes - inside Layout */}
+      <Route path="/*" element={
+        <Layout>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/search" element={<SearchPage />} />
+            <Route path="/profile/:id" element={<ProfilePage />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/contact" element={<ContactPage />} />
+            <Route path="/privacy" element={<PrivacyPage />} />
+            <Route path="/filmography" element={<FilmographyPage />} />
 
-        <Route
-          path="/dashboard"
-          element={
-            <ProtectedRoute>
-              <DashboardPage />
-            </ProtectedRoute>
-          }
-        />
+            <Route
+              path="/auth"
+              element={
+                <PublicOnlyRoute>
+                  <AuthPage />
+                </PublicOnlyRoute>
+              }
+            />
 
-        <Route
-          path="/messages"
-          element={
-            <ProtectedRoute>
-              <MessagesPage />
-            </ProtectedRoute>
-          }
-        />
+            <Route
+              path="/dashboard"
+              element={
+                <ProtectedRoute>
+                  <DashboardPage />
+                </ProtectedRoute>
+              }
+            />
 
-        <Route
-          path="/create-profile"
-          element={
-            <ProtectedRoute>
-              <CreateProfilePage />
-            </ProtectedRoute>
-          }
-        />
+            <Route
+              path="/messages"
+              element={
+                <ProtectedRoute>
+                  <MessagesPage />
+                </ProtectedRoute>
+              }
+            />
 
-        <Route
-          path="/edit-profile/:id"
-          element={
-            <ProtectedRoute>
-              <EditProfilePage />
-            </ProtectedRoute>
-          }
-        />
+            <Route
+              path="/create-profile"
+              element={
+                <ProtectedRoute>
+                  <CreateProfilePage />
+                </ProtectedRoute>
+              }
+            />
 
-        {/* Admin Routes */}
-        <Route path="/admin/login" element={<AdminLogin />} />
-        <Route path="/admin" element={<AdminLayout />}>
-          <Route index element={<AdminDashboard />} />
-          <Route path="users" element={<AdminUsers />} />
-          <Route path="profiles" element={<AdminProfiles />} />
-          <Route path="messages" element={<AdminMessages />} />
-          <Route path="audit" element={<AdminAuditLog />} />
-        </Route>
+            <Route
+              path="/edit-profile/:id"
+              element={
+                <ProtectedRoute>
+                  <EditProfilePage />
+                </ProtectedRoute>
+              }
+            />
 
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-    </Layout>
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </Layout>
+      } />
+    </Routes>
   );
 }
