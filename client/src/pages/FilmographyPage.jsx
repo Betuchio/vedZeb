@@ -22,6 +22,22 @@ export default function FilmographyPage() {
       directors: 'Martyna Wojciechowska, Jowita Baraniecka',
       platform: 'hbo',
       videoUrl: 'https://www.hbomax.com/ge/en/movies/stolen-children/5be67ea5-d702-403f-93e3-3bfd0422aed6'
+    },
+    {
+      id: 2,
+      title: {
+        ka: 'დაკარგული ტყუპი, დამარხული ჩემოდანი და საქართველოს "მოპარული" ბავშვების ძიება',
+        en: "The missing 'twin', the buried suitcase, and the hunt to find Georgia's 'stolen' children",
+        ru: 'Пропавший близнец, зарытый чемодан и поиск «украденных» детей Грузии'
+      },
+      year: 2025,
+      description: {
+        ka: 'ABC News-ის დოკუმენტური ფილმი საქართველოში მოპარული ბავშვების შესახებ - ოჯახები ეძებენ დაკარგულ შვილებს.',
+        en: "ABC News documentary about Georgia's stolen children - families searching for their lost children.",
+        ru: 'Документальный фильм ABC News об украденных детях Грузии — семьи ищут своих потерянных детей.'
+      },
+      platform: 'youtube',
+      videoUrl: 'https://www.youtube.com/watch?v=aqJGBRyjt6Y'
     }
   ];
 

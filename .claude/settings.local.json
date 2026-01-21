@@ -36,7 +36,9 @@
       "Bash(git add:*)",
       "Bash(git commit:*)",
       "Bash(git push:*)",
-      "WebFetch(domain:ved-zeb.vercel.app)"
+      "WebFetch(domain:ved-zeb.vercel.app)",
+      "WebFetch(domain:www.youtube.com)",
+      "WebSearch"
     ]
   }
 }
