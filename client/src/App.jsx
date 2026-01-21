@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
 import { Layout } from './components/layout';
 import { LoadingScreen } from './components/common';
@@ -53,16 +53,72 @@ function PublicOnlyRoute({ children }) {
   return children;
 }
 
-export default function App() {
-  const { loading } = useAuth();
+function MainRoutes() {
+  return (
+    <Layout>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/search" element={<SearchPage />} />
+        <Route path="/profile/:id" element={<ProfilePage />} />
+        <Route path="/about" element={<AboutPage />} />
+        <Route path="/contact" element={<ContactPage />} />
+        <Route path="/privacy" element={<PrivacyPage />} />
+        <Route path="/filmography" element={<FilmographyPage />} />
 
-  if (loading) {
-    return <LoadingScreen />;
-  }
+        <Route
+          path="/auth"
+          element={
+            <PublicOnlyRoute>
+              <AuthPage />
+            </PublicOnlyRoute>
+          }
+        />
 
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <DashboardPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/messages"
+          element={
+            <ProtectedRoute>
+              <MessagesPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/create-profile"
+          element={
+            <ProtectedRoute>
+              <CreateProfilePage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/edit-profile/:id"
+          element={
+            <ProtectedRoute>
+              <EditProfilePage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </Layout>
+  );
+}
+
+function AdminRoutes() {
   return (
     <Routes>
-      {/* Admin Routes - outside main Layout */}
       <Route path="/admin/login" element={<AdminLogin />} />
       <Route path="/admin" element={<AdminLayout />}>
         <Route index element={<AdminDashboard />} />
@@ -71,68 +127,24 @@ export default function App() {
         <Route path="messages" element={<AdminMessages />} />
         <Route path="audit" element={<AdminAuditLog />} />
       </Route>
-
-      {/* Main Site Routes - inside Layout */}
-      <Route path="/*" element={
-        <Layout>
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/search" element={<SearchPage />} />
-            <Route path="/profile/:id" element={<ProfilePage />} />
-            <Route path="/about" element={<AboutPage />} />
-            <Route path="/contact" element={<ContactPage />} />
-            <Route path="/privacy" element={<PrivacyPage />} />
-            <Route path="/filmography" element={<FilmographyPage />} />
-
-            <Route
-              path="/auth"
-              element={
-                <PublicOnlyRoute>
-                  <AuthPage />
-                </PublicOnlyRoute>
-              }
-            />
-
-            <Route
-              path="/dashboard"
-              element={
-                <ProtectedRoute>
-                  <DashboardPage />
-                </ProtectedRoute>
-              }
-            />
-
-            <Route
-              path="/messages"
-              element={
-                <ProtectedRoute>
-                  <MessagesPage />
-                </ProtectedRoute>
-              }
-            />
-
-            <Route
-              path="/create-profile"
-              element={
-                <ProtectedRoute>
-                  <CreateProfilePage />
-                </ProtectedRoute>
-              }
-            />
-
-            <Route
-              path="/edit-profile/:id"
-              element={
-                <ProtectedRoute>
-                  <EditProfilePage />
-                </ProtectedRoute>
-              }
-            />
-
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
-        </Layout>
-      } />
     </Routes>
   );
+}
+
+export default function App() {
+  const { loading } = useAuth();
+  const location = useLocation();
+
+  if (loading) {
+    return <LoadingScreen />;
+  }
+
+  // Check if current path is admin
+  const isAdminPath = location.pathname.startsWith('/admin');
+
+  if (isAdminPath) {
+    return <AdminRoutes />;
+  }
+
+  return <MainRoutes />;
 }
