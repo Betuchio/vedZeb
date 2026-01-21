@@ -7,23 +7,14 @@ export default function FilmographyPage() {
   const films = [
     {
       id: 1,
-      title: 'დაკარგული სულები',
-      titleEn: 'Lost Souls',
-      year: 2023,
-      description: 'დოკუმენტური ფილმი გაშვილებული ბავშვების ძიების შესახებ',
-      descriptionEn: 'Documentary about searching for adopted children',
-      thumbnail: '/films/lost-souls.jpg',
-      videoUrl: 'https://www.youtube.com/watch?v=example1'
-    },
-    {
-      id: 2,
-      title: 'ოჯახის ძიებაში',
-      titleEn: 'In Search of Family',
-      year: 2022,
-      description: 'ისტორიები ადამიანების შესახებ, რომლებიც თავიანთ ბიოლოგიურ ოჯახს ეძებენ',
-      descriptionEn: 'Stories of people searching for their biological families',
-      thumbnail: '/films/family-search.jpg',
-      videoUrl: 'https://www.youtube.com/watch?v=example2'
+      title: 'მოპარული ბავშვები',
+      titleEn: 'Stolen Children',
+      year: 2025,
+      description: 'დოკუმენტური ფილმი, რომელიც ამხელს ტრეფიკინგის სქემას - ათიათასობით ახალშობილი განაცალკევეს მათი ოჯახებისგან.',
+      descriptionEn: 'Documentary exposing a trafficking scheme that separated tens of thousands of newborns from their families.',
+      directors: 'Martyna Wojciechowska, Jowita Baraniecka',
+      platform: 'hbo',
+      videoUrl: 'https://www.hbomax.com/ge/en/movies/stolen-children/5be67ea5-d702-403f-93e3-3bfd0422aed6'
     }
   ];
 
@@ -37,37 +28,62 @@ export default function FilmographyPage() {
 
         <div className="space-y-6">
           {films.map((film) => (
-            <Card key={film.id}>
-              <Card.Body>
-                <div className="flex flex-col md:flex-row gap-6">
+            <Card key={film.id} className="overflow-hidden">
+              <Card.Body className="p-0">
+                <div className="flex flex-col md:flex-row">
                   <div className="flex-shrink-0">
-                    <div className="w-full md:w-48 h-32 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center">
-                      <svg className="w-12 h-12 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                      </svg>
+                    <div className={`w-full md:w-56 h-40 md:h-full flex items-center justify-center ${
+                      film.platform === 'hbo'
+                        ? 'bg-gradient-to-br from-purple-900 to-purple-700'
+                        : 'bg-gradient-to-br from-red-600 to-red-500'
+                    }`}>
+                      {film.platform === 'hbo' ? (
+                        <span className="text-white text-3xl font-bold tracking-wider">HBO</span>
+                      ) : (
+                        <svg className="w-16 h-16 text-white" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/>
+                        </svg>
+                      )}
                     </div>
                   </div>
-                  <div className="flex-1">
-                    <div className="flex items-start justify-between">
+                  <div className="flex-1 p-6">
+                    <div className="flex items-start justify-between gap-4">
                       <div>
                         <h3 className="text-xl font-semibold text-gray-900">{film.title}</h3>
                         <p className="text-sm text-gray-500">{film.titleEn}</p>
                       </div>
-                      <span className="px-3 py-1 bg-indigo-100 text-indigo-700 text-sm font-medium rounded-full">
+                      <span className={`px-3 py-1 text-sm font-medium rounded-full flex-shrink-0 ${
+                        film.platform === 'hbo'
+                          ? 'bg-purple-100 text-purple-700'
+                          : 'bg-red-100 text-red-700'
+                      }`}>
                         {film.year}
                       </span>
                     </div>
                     <p className="mt-3 text-gray-600">{film.description}</p>
+                    {film.directors && (
+                      <p className="mt-2 text-sm text-gray-500">
+                        <span className="font-medium">{t('filmography.directors', 'რეჟისორები')}:</span> {film.directors}
+                      </p>
+                    )}
                     <a
                       href={film.videoUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 mt-4 text-indigo-600 hover:text-indigo-700 font-medium"
+                      className={`inline-flex items-center gap-2 mt-4 font-medium transition-colors ${
+                        film.platform === 'hbo'
+                          ? 'text-purple-600 hover:text-purple-700'
+                          : 'text-red-600 hover:text-red-700'
+                      }`}
                     >
-                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/>
+                      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                       </svg>
-                      {t('filmography.watch', 'ნახვა YouTube-ზე')}
+                      {film.platform === 'hbo'
+                        ? t('filmography.watchHBO', 'ნახვა HBO Max-ზე')
+                        : t('filmography.watch', 'ნახვა YouTube-ზე')
+                      }
                     </a>
                   </div>
                 </div>
