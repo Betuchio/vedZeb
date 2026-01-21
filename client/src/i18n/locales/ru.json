@@ -185,6 +185,7 @@
     "title": "Мой кабинет",
     "myProfiles": "Мои объявления",
     "contactRequests": "Запросы контактов",
+    "messages": "Сообщения",
     "searchAlerts": "Уведомления о поиске",
     "settings": "Настройки",
     "noProfiles": "У вас пока нет объявлений",
@@ -196,7 +197,15 @@
       "accepted": "Принято",
       "rejected": "Отклонено",
       "accept": "Принять",
-      "reject": "Отклонить"
+      "reject": "Отклонить",
+      "viewConversation": "Открыть переписку",
+      "reply": "Ответить",
+      "sendReply": "Отправить",
+      "typeMessage": "Напишите сообщение...",
+      "noMessages": "Сообщений пока нет",
+      "you": "Вы",
+      "backToList": "Назад",
+      "conversationWith": "Переписка с"
     },
     "alerts": {
       "noAlerts": "У вас нет уведомлений о поиске",

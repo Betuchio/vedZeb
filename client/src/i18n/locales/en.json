@@ -185,6 +185,7 @@
     "title": "My Page",
     "myProfiles": "My Listings",
     "contactRequests": "Contact Requests",
+    "messages": "Messages",
     "searchAlerts": "Search Alerts",
     "settings": "Settings",
     "noProfiles": "You don't have any listings yet",
@@ -196,7 +197,15 @@
       "accepted": "Accepted",
       "rejected": "Rejected",
       "accept": "Accept",
-      "reject": "Reject"
+      "reject": "Reject",
+      "viewConversation": "View Conversation",
+      "reply": "Reply",
+      "sendReply": "Send",
+      "typeMessage": "Type a message...",
+      "noMessages": "No messages yet",
+      "you": "You",
+      "backToList": "Back",
+      "conversationWith": "Conversation with"
     },
     "alerts": {
       "noAlerts": "You don't have any search alerts",

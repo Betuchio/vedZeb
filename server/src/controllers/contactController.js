@@ -34,6 +34,7 @@ export const createContactRequest = async (req, res, next) => {
       throw new AppError('Contact request already sent', 409);
     }
 
+    // Create contact request
     const contactRequest = await prisma.contactRequest.create({
       data: {
         fromUserId: req.user.id,
@@ -51,6 +52,17 @@ export const createContactRequest = async (req, res, next) => {
         }
       }
     });
+
+    // If message is provided, also create a message record
+    if (message) {
+      await prisma.message.create({
+        data: {
+          contactRequestId: contactRequest.id,
+          senderId: req.user.id,
+          content: message
+        }
+      });
+    }
 
     res.status(201).json({ contactRequest });
   } catch (error) {
@@ -71,11 +83,17 @@ export const getMyContactRequests = async (req, res, next) => {
             photos: {
               where: { isPrimary: true },
               take: 1
+            },
+            user: {
+              select: { id: true }
             }
           }
+        },
+        messages: {
+          orderBy: { createdAt: 'asc' }
         }
       },
-      orderBy: { createdAt: 'desc' }
+      orderBy: { updatedAt: 'desc' }
     });
 
     // Get requests I received (on my profiles)
@@ -102,11 +120,15 @@ export const getMyContactRequests = async (req, res, next) => {
             select: {
               id: true,
               firstName: true,
-              lastName: true
+              lastName: true,
+              userId: true
             }
+          },
+          messages: {
+            orderBy: { createdAt: 'asc' }
           }
         },
-        orderBy: { createdAt: 'desc' }
+        orderBy: { updatedAt: 'desc' }
       });
     }
 
@@ -189,6 +211,98 @@ export const deleteContactRequest = async (req, res, next) => {
     await prisma.contactRequest.delete({ where: { id } });
 
     res.json({ message: 'Contact request deleted' });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Send a message in a conversation
+export const sendMessage = async (req, res, next) => {
+  try {
+    const { id } = req.params; // contactRequestId
+    const { content } = req.body;
+
+    if (!content || !content.trim()) {
+      throw new AppError('Message content is required', 400);
+    }
+
+    // Find the contact request
+    const contactRequest = await prisma.contactRequest.findUnique({
+      where: { id },
+      include: { toProfile: true }
+    });
+
+    if (!contactRequest) {
+      throw new AppError('Conversation not found', 404);
+    }
+
+    // Check if user is part of this conversation
+    const isFromUser = contactRequest.fromUserId === req.user.id;
+    const isProfileOwner = contactRequest.toProfile.userId === req.user.id;
+
+    if (!isFromUser && !isProfileOwner) {
+      throw new AppError('Not authorized to send message in this conversation', 403);
+    }
+
+    // Create the message
+    const message = await prisma.message.create({
+      data: {
+        contactRequestId: id,
+        senderId: req.user.id,
+        content: content.trim()
+      }
+    });
+
+    // Update the contactRequest updatedAt to sort conversations by recent activity
+    await prisma.contactRequest.update({
+      where: { id },
+      data: { updatedAt: new Date() }
+    });
+
+    res.status(201).json({ message });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Get messages for a conversation
+export const getMessages = async (req, res, next) => {
+  try {
+    const { id } = req.params; // contactRequestId
+
+    const contactRequest = await prisma.contactRequest.findUnique({
+      where: { id },
+      include: { toProfile: true }
+    });
+
+    if (!contactRequest) {
+      throw new AppError('Conversation not found', 404);
+    }
+
+    // Check if user is part of this conversation
+    const isFromUser = contactRequest.fromUserId === req.user.id;
+    const isProfileOwner = contactRequest.toProfile.userId === req.user.id;
+
+    if (!isFromUser && !isProfileOwner) {
+      throw new AppError('Not authorized to view this conversation', 403);
+    }
+
+    const messages = await prisma.message.findMany({
+      where: { contactRequestId: id },
+      orderBy: { createdAt: 'asc' }
+    });
+
+    // Mark messages as read if user is the recipient
+    await prisma.message.updateMany({
+      where: {
+        contactRequestId: id,
+        senderId: { not: req.user.id },
+        isRead: false
+      },
+      data: { isRead: true }
+    });
+
+    res.json({ messages, contactRequest });
   } catch (error) {
     next(error);
   }

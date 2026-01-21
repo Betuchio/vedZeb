@@ -6,7 +6,9 @@ import {
   createContactRequest,
   getMyContactRequests,
   updateContactRequestStatus,
-  deleteContactRequest
+  deleteContactRequest,
+  sendMessage,
+  getMessages
 } from '../controllers/contactController.js';
 
 const router = Router();
@@ -61,5 +63,22 @@ router.put(
 
 // Delete contact request
 router.delete('/:id', deleteContactRequest);
+
+// Get messages for a conversation
+router.get('/:id/messages', getMessages);
+
+// Send message in a conversation
+router.post(
+  '/:id/messages',
+  [
+    body('content')
+      .notEmpty()
+      .withMessage('Message content is required')
+      .isLength({ max: 2000 })
+      .withMessage('Message must be less than 2000 characters'),
+    validate
+  ],
+  sendMessage
+);
 
 export default router;

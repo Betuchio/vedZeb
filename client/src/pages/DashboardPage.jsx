@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { profilesApi, contactsApi, alertsApi } from '../services/api';
-import { Button, Card, Loading, Modal } from '../components/common';
+import { Button, Card, Loading, Input } from '../components/common';
 
 const defaultImage = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="%239ca3af"%3E%3Cpath stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /%3E%3C/svg%3E';
 
@@ -12,6 +12,9 @@ export default function DashboardPage() {
   const queryClient = useQueryClient();
   const [activeTab, setActiveTab] = useState('profiles');
   const [requestTab, setRequestTab] = useState('received');
+  const [selectedConversation, setSelectedConversation] = useState(null);
+  const [replyMessage, setReplyMessage] = useState('');
+  const messagesEndRef = useRef(null);
 
   const { data: profilesData, isLoading: profilesLoading } = useQuery({
     queryKey: ['my-profiles'],
@@ -36,16 +39,149 @@ export default function DashboardPage() {
     onSuccess: () => queryClient.invalidateQueries(['contact-requests'])
   });
 
+  const sendMessageMutation = useMutation({
+    mutationFn: ({ id, content }) => contactsApi.sendMessage(id, content),
+    onSuccess: () => {
+      queryClient.invalidateQueries(['contact-requests']);
+      setReplyMessage('');
+    }
+  });
+
   const deleteAlertMutation = useMutation({
     mutationFn: (id) => alertsApi.delete(id),
     onSuccess: () => queryClient.invalidateQueries(['alerts'])
   });
 
+  // Scroll to bottom of messages
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [selectedConversation]);
+
+  const handleSendMessage = (e) => {
+    e.preventDefault();
+    if (replyMessage.trim() && selectedConversation) {
+      sendMessageMutation.mutate({
+        id: selectedConversation.id,
+        content: replyMessage.trim()
+      });
+    }
+  };
+
   const tabs = [
     { id: 'profiles', label: t('dashboard.myProfiles') },
-    { id: 'requests', label: t('dashboard.contactRequests') },
+    { id: 'requests', label: t('dashboard.messages') },
     { id: 'alerts', label: t('dashboard.searchAlerts') }
   ];
+
+  // Get current user ID from localStorage (stored during login)
+  const getCurrentUserId = () => {
+    try {
+      const token = localStorage.getItem('accessToken');
+      if (token) {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        return payload.userId;
+      }
+    } catch (e) {
+      return null;
+    }
+    return null;
+  };
+
+  const currentUserId = getCurrentUserId();
+
+  // Render conversation view
+  const renderConversation = () => {
+    if (!selectedConversation) return null;
+
+    const isReceived = requestTab === 'received';
+    const otherParty = isReceived
+      ? selectedConversation.fromUser?.phone
+      : selectedConversation.toProfile?.firstName;
+
+    return (
+      <div className="flex flex-col h-[500px]">
+        {/* Header */}
+        <div className="flex items-center gap-4 pb-4 border-b">
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={() => setSelectedConversation(null)}
+          >
+            &larr; {t('dashboard.requests.backToList')}
+          </Button>
+          <div>
+            <h3 className="font-semibold text-gray-900">
+              {t('dashboard.requests.conversationWith')}: {otherParty}
+            </h3>
+            <span className={`text-xs px-2 py-0.5 rounded ${
+              selectedConversation.status === 'accepted'
+                ? 'bg-green-100 text-green-700'
+                : selectedConversation.status === 'rejected'
+                ? 'bg-red-100 text-red-700'
+                : 'bg-yellow-100 text-yellow-700'
+            }`}>
+              {t(`dashboard.requests.${selectedConversation.status}`)}
+            </span>
+          </div>
+        </div>
+
+        {/* Messages */}
+        <div className="flex-1 overflow-y-auto py-4 space-y-3">
+          {selectedConversation.messages?.length > 0 ? (
+            selectedConversation.messages.map((msg) => {
+              const isMyMessage = msg.senderId === currentUserId;
+              return (
+                <div
+                  key={msg.id}
+                  className={`flex ${isMyMessage ? 'justify-end' : 'justify-start'}`}
+                >
+                  <div
+                    className={`max-w-[70%] rounded-lg px-4 py-2 ${
+                      isMyMessage
+                        ? 'bg-primary-600 text-white'
+                        : 'bg-gray-100 text-gray-900'
+                    }`}
+                  >
+                    <p className="text-sm">{msg.content}</p>
+                    <p className={`text-xs mt-1 ${isMyMessage ? 'text-primary-200' : 'text-gray-400'}`}>
+                      {new Date(msg.createdAt).toLocaleString()}
+                    </p>
+                  </div>
+                </div>
+              );
+            })
+          ) : (
+            <p className="text-center text-gray-500 py-8">
+              {t('dashboard.requests.noMessages')}
+            </p>
+          )}
+          <div ref={messagesEndRef} />
+        </div>
+
+        {/* Reply form */}
+        <form onSubmit={handleSendMessage} className="pt-4 border-t">
+          <div className="flex gap-2">
+            <input
+              type="text"
+              value={replyMessage}
+              onChange={(e) => setReplyMessage(e.target.value)}
+              placeholder={t('dashboard.requests.typeMessage')}
+              className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+            />
+            <Button
+              type="submit"
+              loading={sendMessageMutation.isPending}
+              disabled={!replyMessage.trim()}
+            >
+              {t('dashboard.requests.sendReply')}
+            </Button>
+          </div>
+        </form>
+      </div>
+    );
+  };
 
   return (
     <div className="container-page">
@@ -56,7 +192,10 @@ export default function DashboardPage() {
           {tabs.map((tab) => (
             <button
               key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
+              onClick={() => {
+                setActiveTab(tab.id);
+                setSelectedConversation(null);
+              }}
               className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
                 activeTab === tab.id
                   ? 'border-primary-500 text-primary-600'
@@ -129,75 +268,100 @@ export default function DashboardPage() {
 
       {activeTab === 'requests' && (
         <div>
-          <div className="flex space-x-4 mb-6">
-            <Button
-              variant={requestTab === 'received' ? 'primary' : 'secondary'}
-              size="sm"
-              onClick={() => setRequestTab('received')}
-            >
-              {t('dashboard.requests.received')}
-            </Button>
-            <Button
-              variant={requestTab === 'sent' ? 'primary' : 'secondary'}
-              size="sm"
-              onClick={() => setRequestTab('sent')}
-            >
-              {t('dashboard.requests.sent')}
-            </Button>
-          </div>
+          {!selectedConversation && (
+            <div className="flex space-x-4 mb-6">
+              <Button
+                variant={requestTab === 'received' ? 'primary' : 'secondary'}
+                size="sm"
+                onClick={() => setRequestTab('received')}
+              >
+                {t('dashboard.requests.received')}
+              </Button>
+              <Button
+                variant={requestTab === 'sent' ? 'primary' : 'secondary'}
+                size="sm"
+                onClick={() => setRequestTab('sent')}
+              >
+                {t('dashboard.requests.sent')}
+              </Button>
+            </div>
+          )}
 
           {requestsLoading ? (
             <Loading className="py-12" />
+          ) : selectedConversation ? (
+            renderConversation()
           ) : (
             <div className="space-y-4">
               {(requestTab === 'received' ? requestsData?.received : requestsData?.sent)?.length > 0 ? (
                 (requestTab === 'received' ? requestsData.received : requestsData.sent).map((request) => (
                   <Card key={request.id}>
-                    <Card.Body className="flex items-center justify-between">
-                      <div>
-                        <p className="font-medium text-gray-900">
-                          {requestTab === 'received'
-                            ? `${t('dashboard.requests.received')}: ${request.fromUser?.phone}`
-                            : `${t('dashboard.requests.sent')}: ${request.toProfile?.firstName}`}
-                        </p>
-                        {request.message && (
-                          <p className="text-sm text-gray-500 mt-1">{request.message}</p>
-                        )}
-                        <p className="text-xs text-gray-400 mt-1">
-                          {new Date(request.createdAt).toLocaleDateString()}
-                        </p>
-                      </div>
+                    <Card.Body>
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <p className="font-medium text-gray-900">
+                            {requestTab === 'received'
+                              ? `${request.fromUser?.phone}`
+                              : `${request.toProfile?.firstName} ${request.toProfile?.lastName || ''}`}
+                          </p>
 
-                      <div className="flex items-center gap-2">
-                        <span className={`text-xs px-2 py-1 rounded ${
-                          request.status === 'accepted'
-                            ? 'bg-green-100 text-green-700'
-                            : request.status === 'rejected'
-                            ? 'bg-red-100 text-red-700'
-                            : 'bg-yellow-100 text-yellow-700'
-                        }`}>
-                          {t(`dashboard.requests.${request.status}`)}
-                        </span>
+                          {/* Show last message preview */}
+                          {request.messages?.length > 0 && (
+                            <p className="text-sm text-gray-600 mt-1 line-clamp-2">
+                              {request.messages[request.messages.length - 1].content}
+                            </p>
+                          )}
 
-                        {requestTab === 'received' && request.status === 'pending' && (
-                          <>
-                            <Button
-                              size="sm"
-                              onClick={() => updateRequestMutation.mutate({ id: request.id, status: 'accepted' })}
-                              loading={updateRequestMutation.isPending}
-                            >
-                              {t('dashboard.requests.accept')}
-                            </Button>
-                            <Button
-                              size="sm"
-                              variant="secondary"
-                              onClick={() => updateRequestMutation.mutate({ id: request.id, status: 'rejected' })}
-                              loading={updateRequestMutation.isPending}
-                            >
-                              {t('dashboard.requests.reject')}
-                            </Button>
-                          </>
-                        )}
+                          <div className="flex items-center gap-3 mt-2">
+                            <span className={`text-xs px-2 py-1 rounded ${
+                              request.status === 'accepted'
+                                ? 'bg-green-100 text-green-700'
+                                : request.status === 'rejected'
+                                ? 'bg-red-100 text-red-700'
+                                : 'bg-yellow-100 text-yellow-700'
+                            }`}>
+                              {t(`dashboard.requests.${request.status}`)}
+                            </span>
+                            <span className="text-xs text-gray-400">
+                              {new Date(request.updatedAt || request.createdAt).toLocaleDateString()}
+                            </span>
+                            {request.messages?.length > 0 && (
+                              <span className="text-xs text-gray-500">
+                                {request.messages.length} {t('dashboard.messages').toLowerCase()}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-2 ml-4">
+                          <Button
+                            size="sm"
+                            variant="secondary"
+                            onClick={() => setSelectedConversation(request)}
+                          >
+                            {t('dashboard.requests.viewConversation')}
+                          </Button>
+
+                          {requestTab === 'received' && request.status === 'pending' && (
+                            <>
+                              <Button
+                                size="sm"
+                                onClick={() => updateRequestMutation.mutate({ id: request.id, status: 'accepted' })}
+                                loading={updateRequestMutation.isPending}
+                              >
+                                {t('dashboard.requests.accept')}
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="danger"
+                                onClick={() => updateRequestMutation.mutate({ id: request.id, status: 'rejected' })}
+                                loading={updateRequestMutation.isPending}
+                              >
+                                {t('dashboard.requests.reject')}
+                              </Button>
+                            </>
+                          )}
+                        </div>
                       </div>
                     </Card.Body>
                   </Card>

@@ -83,7 +83,9 @@ export const contactsApi = {
   create: (profileId, message) => api.post('/contact-requests', { profileId, message }),
   getAll: (type) => api.get('/contact-requests', { params: { type } }),
   updateStatus: (id, status) => api.put(`/contact-requests/${id}`, { status }),
-  delete: (id) => api.delete(`/contact-requests/${id}`)
+  delete: (id) => api.delete(`/contact-requests/${id}`),
+  getMessages: (id) => api.get(`/contact-requests/${id}/messages`),
+  sendMessage: (id, content) => api.post(`/contact-requests/${id}/messages`, { content })
 };
 
 // Search Alerts API

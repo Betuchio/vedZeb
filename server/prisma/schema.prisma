@@ -133,13 +133,29 @@ model ContactRequest {
   createdAt   DateTime             @default(now())
   updatedAt   DateTime             @updatedAt
 
-  fromUser  User    @relation("SentRequests", fields: [fromUserId], references: [id], onDelete: Cascade)
-  toProfile Profile @relation(fields: [toProfileId], references: [id], onDelete: Cascade)
+  fromUser  User      @relation("SentRequests", fields: [fromUserId], references: [id], onDelete: Cascade)
+  toProfile Profile   @relation(fields: [toProfileId], references: [id], onDelete: Cascade)
+  messages  Message[]
 
   @@unique([fromUserId, toProfileId])
   @@index([fromUserId])
   @@index([toProfileId])
   @@index([status])
+}
+
+model Message {
+  id               String         @id @default(uuid())
+  contactRequestId String
+  senderId         String
+  content          String         @db.Text
+  isRead           Boolean        @default(false)
+  createdAt        DateTime       @default(now())
+
+  contactRequest ContactRequest @relation(fields: [contactRequestId], references: [id], onDelete: Cascade)
+
+  @@index([contactRequestId])
+  @@index([senderId])
+  @@index([isRead])
 }
 
 model SearchAlert {

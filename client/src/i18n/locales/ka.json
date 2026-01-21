@@ -185,6 +185,7 @@
     "title": "ჩემი გვერდი",
     "myProfiles": "ჩემი განცხადებები",
     "contactRequests": "კონტაქტის მოთხოვნები",
+    "messages": "შეტყობინებები",
     "searchAlerts": "საძიებო შეტყობინებები",
     "settings": "პარამეტრები",
     "noProfiles": "თქვენ ჯერ არ გაქვთ განცხადება",
@@ -196,7 +197,15 @@
       "accepted": "მიღებული",
       "rejected": "უარყოფილი",
       "accept": "მიღება",
-      "reject": "უარყოფა"
+      "reject": "უარყოფა",
+      "viewConversation": "მიმოწერის ნახვა",
+      "reply": "პასუხი",
+      "sendReply": "გაგზავნა",
+      "typeMessage": "დაწერეთ შეტყობინება...",
+      "noMessages": "შეტყობინებები არ არის",
+      "you": "თქვენ",
+      "backToList": "უკან",
+      "conversationWith": "მიმოწერა"
     },
     "alerts": {
       "noAlerts": "არ გაქვთ საძიებო შეტყობინებები",
