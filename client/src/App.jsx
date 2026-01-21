@@ -14,6 +14,7 @@ import MessagesPage from './pages/MessagesPage';
 import AboutPage from './pages/AboutPage';
 import ContactPage from './pages/ContactPage';
 import PrivacyPage from './pages/PrivacyPage';
+import FilmographyPage from './pages/FilmographyPage';
 
 function ProtectedRoute({ children }) {
   const { isAuthenticated, loading } = useAuth();
@@ -59,6 +60,7 @@ export default function App() {
         <Route path="/about" element={<AboutPage />} />
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/privacy" element={<PrivacyPage />} />
+        <Route path="/filmography" element={<FilmographyPage />} />
 
         <Route
           path="/auth"
