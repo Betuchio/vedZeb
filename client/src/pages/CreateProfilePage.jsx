@@ -52,20 +52,41 @@ export default function CreateProfilePage() {
     return t(`profile.create.${field}`);
   };
 
+  const [validationError, setValidationError] = useState('');
+
   const createMutation = useMutation({
     mutationFn: async () => {
+      // Validate required fields
+      if (!formData.firstName || formData.firstName.trim().length < 2) {
+        throw new Error(t('profile.create.firstName') + ' ' + t('common.required'));
+      }
+
+      // Build profile data with only non-empty optional fields
       const profileData = {
-        ...formData,
-        birthYear: formData.birthYear ? parseInt(formData.birthYear) : null,
-        birthMonth: formData.birthMonth ? parseInt(formData.birthMonth) : null,
-        birthDay: formData.birthDay ? parseInt(formData.birthDay) : null,
-        maternityHospital: formData.maternityHospital || null,
-        biologicalMotherInfo: formData.biologicalMotherInfo || null,
-        biologicalFatherInfo: formData.biologicalFatherInfo || null,
-        myBirthYear: formData.myBirthYear ? parseInt(formData.myBirthYear) : null,
-        myBirthMonth: formData.myBirthMonth ? parseInt(formData.myBirthMonth) : null,
-        myBirthDay: formData.myBirthDay ? parseInt(formData.myBirthDay) : null
+        type: formData.type,
+        firstName: formData.firstName.trim(),
+        gender: formData.gender,
+        birthDateApproximate: formData.birthDateApproximate
       };
+
+      // Add optional string fields only if not empty
+      if (formData.lastName?.trim()) profileData.lastName = formData.lastName.trim();
+      if (formData.birthPlace?.trim()) profileData.birthPlace = formData.birthPlace.trim();
+      if (formData.lastKnownLocation?.trim()) profileData.lastKnownLocation = formData.lastKnownLocation.trim();
+      if (formData.region) profileData.region = formData.region;
+      if (formData.story?.trim()) profileData.story = formData.story.trim();
+      if (formData.biologicalMotherInfo?.trim()) profileData.biologicalMotherInfo = formData.biologicalMotherInfo.trim();
+      if (formData.biologicalFatherInfo?.trim()) profileData.biologicalFatherInfo = formData.biologicalFatherInfo.trim();
+      if (formData.medicalHistory?.trim()) profileData.medicalHistory = formData.medicalHistory.trim();
+      if (formData.maternityHospital) profileData.maternityHospital = formData.maternityHospital;
+
+      // Add optional integer fields only if not empty
+      if (formData.birthYear) profileData.birthYear = parseInt(formData.birthYear);
+      if (formData.birthMonth) profileData.birthMonth = parseInt(formData.birthMonth);
+      if (formData.birthDay) profileData.birthDay = parseInt(formData.birthDay);
+      if (formData.myBirthYear) profileData.myBirthYear = parseInt(formData.myBirthYear);
+      if (formData.myBirthMonth) profileData.myBirthMonth = parseInt(formData.myBirthMonth);
+      if (formData.myBirthDay) profileData.myBirthDay = parseInt(formData.myBirthDay);
 
       const response = await profilesApi.create(profileData);
       const profileId = response.data.profile.id;
@@ -79,7 +100,11 @@ export default function CreateProfilePage() {
       return profileId;
     },
     onSuccess: (profileId) => {
+      setValidationError('');
       navigate(`/profile/${profileId}`);
+    },
+    onError: (error) => {
+      setValidationError(error.response?.data?.error || error.message || t('common.error'));
     }
   });
 
@@ -203,9 +228,9 @@ export default function CreateProfilePage() {
 
         <Card>
           <Card.Body className="p-6">
-            {createMutation.error && (
+            {(createMutation.error || validationError) && (
               <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-600">
-                {createMutation.error.response?.data?.error || t('common.error')}
+                {validationError || createMutation.error?.response?.data?.error || t('common.error')}
               </div>
             )}
 
