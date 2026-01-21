@@ -16,6 +16,15 @@ import ContactPage from './pages/ContactPage';
 import PrivacyPage from './pages/PrivacyPage';
 import FilmographyPage from './pages/FilmographyPage';
 
+// Admin Pages
+import AdminLayout from './pages/admin/AdminLayout';
+import AdminLogin from './pages/admin/AdminLogin';
+import AdminDashboard from './pages/admin/AdminDashboard';
+import AdminUsers from './pages/admin/AdminUsers';
+import AdminProfiles from './pages/admin/AdminProfiles';
+import AdminMessages from './pages/admin/AdminMessages';
+import AdminAuditLog from './pages/admin/AdminAuditLog';
+
 function ProtectedRoute({ children }) {
   const { isAuthenticated, loading } = useAuth();
 
@@ -106,6 +115,16 @@ export default function App() {
             </ProtectedRoute>
           }
         />
+
+        {/* Admin Routes */}
+        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route index element={<AdminDashboard />} />
+          <Route path="users" element={<AdminUsers />} />
+          <Route path="profiles" element={<AdminProfiles />} />
+          <Route path="messages" element={<AdminMessages />} />
+          <Route path="audit" element={<AdminAuditLog />} />
+        </Route>
 
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
