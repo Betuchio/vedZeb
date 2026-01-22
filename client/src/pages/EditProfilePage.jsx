@@ -35,6 +35,8 @@ export default function EditProfilePage() {
         firstName: p.firstName || '',
         lastName: p.lastName || '',
         birthYear: p.birthYear?.toString() || '',
+        birthMonth: p.birthMonth?.toString() || '',
+        birthDay: p.birthDay?.toString() || '',
         birthDateApproximate: p.birthDateApproximate || false,
         birthPlace: p.birthPlace || '',
         lastKnownLocation: p.lastKnownLocation || '',
@@ -54,6 +56,8 @@ export default function EditProfilePage() {
       const updateData = {
         ...formData,
         birthYear: formData.birthYear ? parseInt(formData.birthYear) : null,
+        birthMonth: formData.birthMonth ? parseInt(formData.birthMonth) : null,
+        birthDay: formData.birthDay ? parseInt(formData.birthDay) : null,
         biologicalMotherInfo: formData.biologicalMotherInfo || null,
         biologicalFatherInfo: formData.biologicalFatherInfo || null
       };
@@ -67,7 +71,7 @@ export default function EditProfilePage() {
       }
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(['profile', id]);
+      queryClient.invalidateQueries({ queryKey: ['profile', id] });
       navigate(`/profile/${id}`);
     }
   });
@@ -75,7 +79,7 @@ export default function EditProfilePage() {
   const deletePhotoMutation = useMutation({
     mutationFn: (photoId) => profilesApi.deletePhoto(id, photoId),
     onSuccess: () => {
-      queryClient.invalidateQueries(['profile', id]);
+      queryClient.invalidateQueries({ queryKey: ['profile', id] });
     }
   });
 
@@ -132,6 +136,22 @@ export default function EditProfilePage() {
     }))
   ];
 
+  const monthOptions = [
+    { value: '', label: '-' },
+    ...Array.from({ length: 12 }, (_, i) => ({
+      value: String(i + 1),
+      label: String(i + 1).padStart(2, '0')
+    }))
+  ];
+
+  const dayOptions = [
+    { value: '', label: '-' },
+    ...Array.from({ length: 31 }, (_, i) => ({
+      value: String(i + 1),
+      label: String(i + 1).padStart(2, '0')
+    }))
+  ];
+
   const photos = data.profile.photos || [];
   const totalPhotos = photos.length + newPhotos.length;
 
@@ -177,7 +197,7 @@ export default function EditProfilePage() {
                 onChange={(e) => handleChange('gender', e.target.value)}
               />
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-3 gap-4">
                 <Select
                   label={t('profile.create.birthYear')}
                   options={yearOptions}
@@ -185,19 +205,33 @@ export default function EditProfilePage() {
                   onChange={(e) => handleChange('birthYear', e.target.value)}
                 />
 
-                <div className="flex items-end pb-2">
-                  <label className="flex items-center">
-                    <input
-                      type="checkbox"
-                      checked={formData.birthDateApproximate}
-                      onChange={(e) => handleChange('birthDateApproximate', e.target.checked)}
-                      className="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
-                    />
-                    <span className="ml-2 text-sm text-gray-600">
-                      {t('profile.create.approximate')}
-                    </span>
-                  </label>
-                </div>
+                <Select
+                  label={t('profile.create.birthMonth') || 'Month'}
+                  options={monthOptions}
+                  value={formData.birthMonth}
+                  onChange={(e) => handleChange('birthMonth', e.target.value)}
+                />
+
+                <Select
+                  label={t('profile.create.birthDay') || 'Day'}
+                  options={dayOptions}
+                  value={formData.birthDay}
+                  onChange={(e) => handleChange('birthDay', e.target.value)}
+                />
+              </div>
+
+              <div className="flex items-center">
+                <label className="flex items-center">
+                  <input
+                    type="checkbox"
+                    checked={formData.birthDateApproximate}
+                    onChange={(e) => handleChange('birthDateApproximate', e.target.checked)}
+                    className="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+                  />
+                  <span className="ml-2 text-sm text-gray-600">
+                    {t('profile.create.approximate')}
+                  </span>
+                </label>
               </div>
 
               <Input

@@ -17,10 +17,20 @@ export function AdminProvider({ children }) {
 
     try {
       const response = await adminApi.getMe();
-      setAdmin(response.data.admin);
-      setPermissions(response.data.permissions);
+      if (response.data?.admin) {
+        setAdmin(response.data.admin);
+        setPermissions(response.data.permissions || []);
+      } else {
+        // Invalid response structure
+        localStorage.removeItem('adminToken');
+        setAdmin(null);
+        setPermissions([]);
+      }
     } catch (error) {
+      console.error('Admin auth check failed:', error.message);
       localStorage.removeItem('adminToken');
+      setAdmin(null);
+      setPermissions([]);
     } finally {
       setLoading(false);
     }

@@ -30,12 +30,24 @@ const allowedOrigins = [
   process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null,
 ].filter(Boolean);
 
+// Add your specific Vercel deployment URLs here
+const vercelDeployments = [
+  'https://vedzeb.vercel.app',
+  'https://vedzeb-client.vercel.app'
+];
+
 app.use(cors({
   origin: function (origin, callback) {
     // Allow requests with no origin (mobile apps, curl, etc)
     if (!origin) return callback(null, true);
 
-    if (allowedOrigins.some(allowed => origin.startsWith(allowed) || origin.includes('vercel.app'))) {
+    // Check allowed origins (localhost + CLIENT_URL + VERCEL_URL)
+    if (allowedOrigins.some(allowed => origin === allowed || origin.startsWith(allowed))) {
+      return callback(null, true);
+    }
+
+    // Check specific Vercel deployments
+    if (vercelDeployments.some(url => origin === url || origin.startsWith(url))) {
       return callback(null, true);
     }
 

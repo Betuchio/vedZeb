@@ -36,20 +36,20 @@ export default function DashboardPage() {
 
   const updateRequestMutation = useMutation({
     mutationFn: ({ id, status }) => contactsApi.updateStatus(id, status),
-    onSuccess: () => queryClient.invalidateQueries(['contact-requests'])
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['contact-requests'] })
   });
 
   const sendMessageMutation = useMutation({
     mutationFn: ({ id, content }) => contactsApi.sendMessage(id, content),
     onSuccess: () => {
-      queryClient.invalidateQueries(['contact-requests']);
+      queryClient.invalidateQueries({ queryKey: ['contact-requests'] });
       setReplyMessage('');
     }
   });
 
   const deleteAlertMutation = useMutation({
     mutationFn: (id) => alertsApi.delete(id),
-    onSuccess: () => queryClient.invalidateQueries(['alerts'])
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['alerts'] })
   });
 
   // Scroll to bottom of messages

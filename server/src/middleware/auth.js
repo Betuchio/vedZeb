@@ -22,6 +22,10 @@ export const authenticate = async (req, res, next) => {
       throw new AppError('User not found', 401);
     }
 
+    if (user.isBanned) {
+      throw new AppError('Your account has been banned', 403);
+    }
+
     req.user = user;
     next();
   } catch (error) {

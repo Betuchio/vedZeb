@@ -18,6 +18,25 @@ cloudinary.config({
   api_secret: apiSecret
 });
 
+// Detect MIME type from buffer magic bytes
+const detectMimeType = (buffer) => {
+  if (buffer[0] === 0x89 && buffer[1] === 0x50 && buffer[2] === 0x4E && buffer[3] === 0x47) {
+    return 'image/png';
+  }
+  if (buffer[0] === 0xFF && buffer[1] === 0xD8 && buffer[2] === 0xFF) {
+    return 'image/jpeg';
+  }
+  if (buffer[0] === 0x52 && buffer[1] === 0x49 && buffer[2] === 0x46 && buffer[3] === 0x46 &&
+      buffer[8] === 0x57 && buffer[9] === 0x45 && buffer[10] === 0x42 && buffer[11] === 0x50) {
+    return 'image/webp';
+  }
+  if (buffer[0] === 0x47 && buffer[1] === 0x49 && buffer[2] === 0x46) {
+    return 'image/gif';
+  }
+  // Default to jpeg if unknown
+  return 'image/jpeg';
+};
+
 export const uploadImage = async (fileBuffer, options = {}) => {
   const defaultOptions = {
     folder: 'vedzeb/profiles',
@@ -29,9 +48,10 @@ export const uploadImage = async (fileBuffer, options = {}) => {
   };
 
   try {
-    // Convert buffer to base64 data URI for Vercel serverless compatibility
+    // Detect MIME type from buffer and convert to base64 data URI
+    const mimeType = detectMimeType(fileBuffer);
     const base64String = fileBuffer.toString('base64');
-    const dataUri = `data:image/jpeg;base64,${base64String}`;
+    const dataUri = `data:${mimeType};base64,${base64String}`;
 
     const result = await cloudinary.uploader.upload(dataUri, {
       ...defaultOptions,

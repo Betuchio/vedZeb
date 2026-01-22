@@ -21,8 +21,8 @@ export default function MessagesPage() {
   const sendMessageMutation = useMutation({
     mutationFn: ({ id, content }) => contactsApi.sendMessage(id, content),
     onSuccess: () => {
-      queryClient.invalidateQueries(['contact-requests']);
-      queryClient.invalidateQueries(['contact-requests-unread']);
+      queryClient.invalidateQueries({ queryKey: ['contact-requests'] });
+      queryClient.invalidateQueries({ queryKey: ['contact-requests-unread'] });
       setReplyMessage('');
     }
   });
@@ -30,8 +30,8 @@ export default function MessagesPage() {
   const updateRequestMutation = useMutation({
     mutationFn: ({ id, status }) => contactsApi.updateStatus(id, status),
     onSuccess: () => {
-      queryClient.invalidateQueries(['contact-requests']);
-      queryClient.invalidateQueries(['contact-requests-unread']);
+      queryClient.invalidateQueries({ queryKey: ['contact-requests'] });
+      queryClient.invalidateQueries({ queryKey: ['contact-requests-unread'] });
     }
   });
 

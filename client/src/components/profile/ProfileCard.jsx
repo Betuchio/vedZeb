@@ -12,7 +12,8 @@ export default function ProfileCard({ profile }) {
   const typeLabels = {
     searching_sibling: t('search.types.searching_sibling'),
     searching_child: t('search.types.searching_child'),
-    searching_parent: t('search.types.searching_parent')
+    searching_parent: t('search.types.searching_parent'),
+    searching_relative: t('search.types.searching_relative')
   };
 
   const genderLabels = {
