@@ -30,7 +30,7 @@ const allowedOrigins = [
   process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null,
 ].filter(Boolean);
 
-// Add your specific Vercel deployment URLs here
+// CORS allowed Vercel deployments - Updated 2026-01-22
 const vercelDeployments = [
   'https://ved-zeb.vercel.app',
   'https://vedzeb.vercel.app',
