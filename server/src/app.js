@@ -32,8 +32,9 @@ const allowedOrigins = [
 
 // Add your specific Vercel deployment URLs here
 const vercelDeployments = [
+  'https://ved-zeb.vercel.app',
   'https://vedzeb.vercel.app',
-  'https://vedzeb-client.vercel.app'
+  'https://ved-zeb-client.vercel.app'
 ];
 
 app.use(cors({
