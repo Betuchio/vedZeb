@@ -1,8 +1,10 @@
 import { Navigate, Outlet, NavLink } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAdmin } from '../../context/AdminContext';
 import { LoadingScreen } from '../../components/common';
 
 export default function AdminLayout() {
+  const { t } = useTranslation();
   const { admin, loading, isAdminAuthenticated, adminLogout, hasPermission } = useAdmin();
 
   if (loading) {
@@ -14,11 +16,10 @@ export default function AdminLayout() {
   }
 
   const navItems = [
-    { to: '/admin', label: 'Dashboard', permission: 'view_stats', end: true },
-    { to: '/admin/users', label: 'Users', permission: 'view_users' },
-    { to: '/admin/profiles', label: 'Profiles', permission: 'view_profiles' },
-    { to: '/admin/messages', label: 'Messages', permission: 'view_messages' },
-    { to: '/admin/audit', label: 'Audit Log', permission: 'view_audit_logs' }
+    { to: '/admin', label: t('admin.nav.dashboard'), permission: 'view_stats', end: true },
+    { to: '/admin/users', label: t('admin.nav.users'), permission: 'view_users' },
+    { to: '/admin/profiles', label: t('admin.nav.profiles'), permission: 'view_profiles' },
+    { to: '/admin/audit', label: t('admin.nav.auditLog'), permission: 'view_audit_logs' }
   ];
 
   const roleColors = {
@@ -34,9 +35,9 @@ export default function AdminLayout() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-4">
-              <h1 className="text-xl font-bold">VedZeb Admin</h1>
+              <h1 className="text-xl font-bold">VedZeb {t('admin.title')}</h1>
               <span className={`text-xs px-2 py-1 rounded ${roleColors[admin?.role] || 'bg-gray-100 text-gray-700'}`}>
-                {admin?.role}
+                {t(`admin.roles.${admin?.role}`)}
               </span>
             </div>
 
@@ -48,7 +49,7 @@ export default function AdminLayout() {
                 onClick={adminLogout}
                 className="text-sm text-gray-300 hover:text-white"
               >
-                Logout
+                {t('admin.nav.logout')}
               </button>
             </div>
           </div>

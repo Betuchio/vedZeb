@@ -22,7 +22,6 @@ import AdminLogin from './pages/admin/AdminLogin';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminUsers from './pages/admin/AdminUsers';
 import AdminProfiles from './pages/admin/AdminProfiles';
-import AdminMessages from './pages/admin/AdminMessages';
 import AdminAuditLog from './pages/admin/AdminAuditLog';
 
 function ProtectedRoute({ children }) {
@@ -124,7 +123,6 @@ function AdminRoutes() {
         <Route index element={<AdminDashboard />} />
         <Route path="users" element={<AdminUsers />} />
         <Route path="profiles" element={<AdminProfiles />} />
-        <Route path="messages" element={<AdminMessages />} />
         <Route path="audit" element={<AdminAuditLog />} />
       </Route>
     </Routes>

@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { useNavigate, Navigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAdmin } from '../../context/AdminContext';
 import { Button, Input, Card } from '../../components/common';
 
 export default function AdminLogin() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { adminLogin, isAdminAuthenticated, loading } = useAdmin();
 
@@ -29,7 +31,7 @@ export default function AdminLogin() {
       await adminLogin(username, password);
       navigate('/admin');
     } catch (err) {
-      setError(err.response?.data?.error || 'Login failed');
+      setError(err.response?.data?.error || t('admin.login.loginFailed'));
     } finally {
       setIsLoading(false);
     }
@@ -40,8 +42,8 @@ export default function AdminLogin() {
       <Card className="w-full max-w-md">
         <Card.Body className="p-8">
           <div className="text-center mb-8">
-            <h1 className="text-2xl font-bold text-gray-900">Admin Panel</h1>
-            <p className="text-gray-500 mt-2">VedZeb Administration</p>
+            <h1 className="text-2xl font-bold text-gray-900">{t('admin.login.title')}</h1>
+            <p className="text-gray-500 mt-2">{t('admin.login.subtitle')}</p>
           </div>
 
           {error && (
@@ -52,21 +54,21 @@ export default function AdminLogin() {
 
           <form onSubmit={handleSubmit}>
             <Input
-              label="Username"
+              label={t('admin.login.username')}
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              placeholder="Enter username"
+              placeholder={t('admin.login.enterUsername')}
               className="mb-4"
               required
             />
 
             <Input
-              label="Password"
+              label={t('admin.login.password')}
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter password"
+              placeholder={t('admin.login.enterPassword')}
               className="mb-6"
               required
             />
@@ -77,7 +79,7 @@ export default function AdminLogin() {
               loading={isLoading}
               disabled={!username || !password}
             >
-              Login
+              {t('admin.login.loginButton')}
             </Button>
           </form>
         </Card.Body>
